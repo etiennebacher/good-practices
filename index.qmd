@@ -1,0 +1,473 @@
+---
+title: "Some good practices for research with R"
+author: "Etienne Bacher"
+date: "`r Sys.Date()`"
+date-format: long
+institute: "LISER"
+
+format: 
+ revealjs:
+   incremental: false  
+   theme: [moon, custom.scss]
+   pdf-separate-fragments: true
+   strip-comments: true
+   highlight-style: atom-one
+   auto-animate-duration: 0.8
+   code-copy: true
+   slide-number: true
+   
+execute:
+  eval: false
+  echo: true
+---
+
+<br>
+
+1. Validate your data with `{validate}`
+
+<br>
+
+2. Make your R environment reproducible with `{renv}`
+
+<br>
+
+3. Make your paths reproducible with `{here}`
+
+
+# Validate your data with `{validate}`
+
+## Why?
+
+<br><br>
+
+Cleaning data can take hundreds or thousands of lines. 
+
+<br>
+
+Sometimes we do some mistakes that can have **big consequences**.
+
+---
+
+<div style="text-align: center">
+<img src="img/retraction-article.png">
+</div>
+
+---
+
+<br><br><br><br>
+
+> Everyone does coding mistakes; the important thing is whether you do your best to reduce them.
+>
+> -- <cite>Me</cite>
+
+--- 
+
+## What is `{validate}`?
+
+<br>
+
+`{validate}` is an R package that is very useful to ensure that your code has produced the
+right dataset.
+
+<br>
+
+It should be used on the final and on the intermediate datasets (basically anytime you do some big modifications).
+
+
+
+## How to use `{validate}`?
+
+<br>
+
+1. Define a series of expectations, or ***rules***, with `validator()`
+
+<br>
+
+2. Pass your dataset through these rules with `confront()`
+
+<br>
+
+3. Check that all rules are respected.
+
+
+## Example
+
+Let's take the dataset `gapminder`, modify it a bit, and assume it's your output:
+
+```{r}
+library(gapminder)
+library(countrycode)
+
+gapminder$iso <- countrycode(gapminder$country, "country.name", "iso3c")
+
+head(gapminder)
+```
+
+---
+
+1. Define a series of expectations, or ***rules***, with `validator()`:
+
+```{r}
+library(validate)
+
+rules <- validator(
+  # Ensure that all ISO-3 codes have 3 letters
+  field_length(iso, n = 3),
+  
+  # Ensure that there are no duplicated combination of iso-year
+  is_unique(iso, year),
+  
+  # Ensure that year starts at 1952 and doesn't have any missing values
+  min(year) == 1952,
+  !is.na(year)
+)
+```
+
+--- 
+
+2. Pass your dataset through these rules with `confront()`:
+
+```{r}
+x <- confront(gapminder, rules) |>
+  summary() 
+
+head(x)
+```
+
+---
+
+3. Check that all rules are respected (or generate an error if there's a failing test):
+
+```{r}
+stopifnot(unique(x$fails) == 0)
+```
+
+---
+
+Writing rules can be tedious, for example if you have a list of variables that should be positive (GDP, population, etc.).
+
+<br>
+
+Instead of writing `var1 >= 0`, `var2 >= 0`, ..., you can use `var_group()`:
+
+```{r}
+rules <- validator(
+  positive_vars := var_group(lifeExp, pop, gdpPercap),
+  positive_vars >= 0
+)
+
+x <- confront(gapminder, rules) |>
+  summary() 
+
+head(x)
+```
+
+---
+
+<br><br>
+
+There are a lot of other helpers:
+
+* `in_range()`: useful for e.g percentages
+* `field_format()` for regular expressions
+* `is_linear_sequence()`: useful to check if there are some gaps in a series
+* many others...
+
+<br>
+
+See more details in the [The Data Validation Cookbook](https://data-cleaning.github.io/validate/).
+
+
+# Make your R environment reproducible with `{renv}`
+
+---
+
+<br><br><br><br>
+
+> The greatest thing with R is the number of packages available.
+>
+> The worst thing with R is the number of packages available.
+> 
+> -- Me
+
+---
+
+## Packages in R
+
+<br>
+
+Packages make our life simpler by not having to reinvent the wheel.
+
+<br>
+
+But ***packages evolve!*** Between two versions of a same package:
+
+* functions can be removed or renamed;
+* function outputs can change in terms of results or display;
+* function arguments can be moved, removed or renamed.
+
+Moreover, packages can disappear if they are not supported anymore.
+
+## Personal experience
+
+<br>
+
+I did my Master's thesis in R using ~30 packages in total.
+
+<br>
+
+Two months later, I couldn't run my code anymore because a package I used to extract some results slightly changed one of its arguments.
+
+<br>
+
+{{< fa arrow-right >}} &nbsp; choose your packages wisely
+
+## Packages in R
+
+<br>
+
+Even the most used packages in R can change a lot over the years (e.g `tidyverse`).
+
+<br>
+
+It is ***your*** responsability to make your scripts reproducible. If I take your script 4 years later, I should be able to run them.
+
+<br>
+
+Problem: how to deal with evolving packages?
+
+## Solution
+
+<br>
+
+Take a snapshot of packages version using `{renv}`.
+
+<br>
+
+Idea: create a *lockfile* that contains the version of all the packages you used in a project, as well as their dependencies. 
+
+<br>
+
+When you give the project to someone else, they will be able to restore it with the exact same versions.
+
+
+## How does it work?
+
+<br>
+
+1. Initialize `{renv}` whenever you want with `init()`;
+
+<br>
+
+2. Work as usual;
+
+<br>
+
+3. Run `snapshot()` from time to time to update the lockfile;
+
+<br>
+
+4. If you come back to this project later, or if you share this project, run `restore()` the packages as they were when you used them.
+
+
+## Example
+
+Let's take the example of `gapminder` again. We import two packages: `gapminder` and `countrycode`:
+
+```{r}
+library(gapminder)
+library(countrycode)
+
+gapminder$iso <- countrycode(gapminder$country, "country.name", "iso3c")
+
+head(gapminder)
+```
+
+---
+
+1. Initialize `{renv}` whenever you want with `init()`:
+
+```{r eval = FALSE}
+renv::init()
+```
+
+<br>
+
+```{.r}
+* Initializing project ...
+* Discovering package dependencies ... Done!
+* Copying packages into the cache ... Done!
+The following package(s) will be updated in the lockfile:
+
+# CRAN ===============================
+- R6            [* -> 2.5.1]
+- base64enc     [* -> 0.1-3]
+- bslib         [* -> 0.4.2]
+- cachem        [* -> 1.0.6]
+- cli           [* -> 3.5.0]
+- countrycode   [* -> 1.4.0]
+- digest        [* -> 0.6.31]
+- ellipsis      [* -> 0.3.2]
+- evaluate      [* -> 0.19]
+- fansi         [* -> 1.0.3]
+- fastmap       [* -> 1.1.0]
+- fs            [* -> 1.5.2]
+- gapminder     [* -> 0.3.0]
+- glue          [* -> 1.6.2]
+- highr         [* -> 0.10]
+- htmltools     [* -> 0.5.4]
+- jquerylib     [* -> 0.1.4]
+- jsonlite      [* -> 1.8.4]
+- lifecycle     [* -> 1.0.3]
+- magrittr      [* -> 2.0.3]
+- memoise       [* -> 2.0.1]
+- mime          [* -> 0.12]
+- pillar        [* -> 1.8.1]
+- pkgconfig     [* -> 2.0.3]
+- rappdirs      [* -> 0.3.3]
+- renv          [* -> 0.16.0]
+- rmarkdown     [* -> 2.19]
+- sass          [* -> 0.4.4]
+- settings      [* -> 0.2.7]
+- stringi       [* -> 1.7.8]
+- stringr       [* -> 1.5.0]
+- tibble        [* -> 3.1.8]
+- tinytex       [* -> 0.43]
+- utf8          [* -> 1.2.2]
+- validate      [* -> 1.1.1]
+- vctrs         [* -> 0.5.1]
+- xfun          [* -> 0.36]
+- yaml          [* -> 2.3.6]
+
+# GitHub =============================
+- rlang         [* -> tidyverse/rlang@HEAD]
+
+# https://yihui.r-universe.dev =======
+- knitr         [* -> 1.41.8]
+
+The version of R recorded in the lockfile will be updated:
+- R             [*] -> [4.2.2]
+
+* Lockfile written to 'C:/Users/etienne/Desktop/Divers/good-practices/renv.lock'.
+
+Restarting R session...
+
+* Project 'C:/Users/etienne/Desktop/Divers/good-practices' loaded. [renv 0.16.0]
+```
+
+---
+
+<br>
+
+This will create:
+
+* a file called `renv.lock`
+* a folder called `renv`
+
+
+<br>
+
+{{< fa arrow-right >}} &nbsp; you shouldn't touch these files!
+
+
+---
+
+<br>
+
+2. Work as usual. Let's import another package:
+
+<br>
+
+```{r eval = FALSE}
+library(dplyr)
+```
+
+<br>
+
+```{.r}
+Error in library(dplyr) : there is no package called ‘dplyr’
+```
+
+<br>
+
+Hum... weird, `dplyr` was installed on my laptop.
+
+---
+
+<br>
+
+`{renv}` creates a sort of "local library" in your project, so you need to reinstall `dplyr` first:
+
+<br>
+
+```{r eval = FALSE}
+install.packages("dplyr")
+```
+
+<br>
+
+```{r}
+library(dplyr)
+```
+
+---
+
+Now that we imported a new package, let's see the status of `{renv}`:
+
+```{r}
+renv::status()
+```
+
+<br>
+
+```{.r}
+The following package(s) are installed but not recorded in the lockfile:
+             _
+  withr        [2.5.0]
+  dplyr        [1.0.10]
+  generics     [0.1.3]
+  tidyselect   [1.2.0]
+
+Use `renv::snapshot()` to add these packages to your lockfile.
+```
+
+---
+
+3. Run `snapshot()` from time to time to update the lockfile;
+
+```{r eval = FALSE}
+renv::snapshot()
+```
+
+<br>
+
+```{.r}
+The following package(s) will be updated in the lockfile:
+
+# CRAN ===============================
+- dplyr        [* -> 1.0.10]
+- generics     [* -> 0.1.3]
+- tidyselect   [* -> 1.2.0]
+- withr        [* -> 2.5.0]
+
+Do you want to proceed? [y/N]: Y
+* Lockfile written to 'C:/Users/etienne/Desktop/Divers/good-practices/renv.lock'.
+```
+
+## Good to know
+
+<br>
+
+**`{renv}` is not a panacea for reproducibility**.
+
+<br>
+
+If your packages depend on external software (e.g `RSelenium` uses Java), `{renv}` cannot install it for you.
+
+<br>
+
+Learn more about `{renv}` capabilities and limitations on [the package's website](https://rstudio.github.io/renv).
+
+
+# Make your paths reproducible with `{here}`
+
