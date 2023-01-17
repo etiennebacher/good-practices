@@ -9,10 +9,10 @@
 <link href="index_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <link href="index_files/libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="index_files/libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.2.269">
+  <meta name="generator" content="quarto-1.2.313">
 
   <meta name="author" content="Etienne Bacher">
-  <meta name="dcterms.date" content="2023-01-16">
+  <meta name="dcterms.date" content="2023-01-17">
   <title>Some good practices for research with R</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -404,7 +404,7 @@ Etienne Bacher
     </div>
 </div>
 
-  <p class="date">January 16, 2023</p>
+  <p class="date">January 17, 2023</p>
 </section>
 <section class="slide level2">
 
@@ -419,6 +419,10 @@ Etienne Bacher
 <p><br></p>
 <ol start="3" type="1">
 <li>Make your paths reproducible with <code>{here}</code></li>
+</ol>
+<p><br></p>
+<ol start="4" type="1">
+<li>Keep a clean session</li>
 </ol>
 </section>
 <section>
@@ -791,12 +795,118 @@ Etienne Bacher
 <p><br></p>
 <p>Learn more about <code>{renv}</code> capabilities and limitations on <a href="https://rstudio.github.io/renv">the package’s website</a>.</p>
 </section></section>
+<section>
 <section id="make-your-paths-reproducible-with-here" class="title-slide slide level1 center">
 <h1>Make your paths reproducible with <code>{here}</code></h1>
+
+</section>
+<section id="paths" class="slide level2">
+<h2>Paths</h2>
+<p><br></p>
+<p>Paths are the devil of reproducibility.</p>
+<p><br></p>
+<p>You can use as many best practices as you want, if you use <strong><em>absolute paths</em></strong>, it is useless.</p>
+</section>
+<section id="paths-1" class="slide level2">
+<h2>Paths</h2>
+<p><br><br></p>
+<p><strong>Absolute path:</strong> path that is specific to your computer because it <em>starts at the root of a computer</em>.</p>
+<p>Ex: “C:/Users/etienne/Desktop/myproject/mydata/WDI”</p>
+<p><br></p>
+<p><strong>Relative path:</strong> path that is specific to a project because it starts at the root of the project.</p>
+<p>Ex: “mydata/WDI”</p>
+</section>
+<section id="relative-paths-in-r" class="slide level2">
+<h2>Relative paths in R</h2>
+<p><br></p>
+<p>Use the package <code>{here}</code>:</p>
+<p><br></p>
+<ul>
+<li>to know the working directory:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>here<span class="sc">::</span><span class="fu">here</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "C:/Users/etienne/Desktop/Divers/good-practices"</code></pre>
+</div>
+</div>
+<p><br></p>
+<ul>
+<li>to use some data, script, etc.:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>mydata <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/WDI/gapminder.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="relative-paths-in-r-1" class="slide level2">
+<h2>Relative paths in R</h2>
+<p><br> <br></p>
+<p>If I give the folder “good-practices” to someone else:</p>
+<ul>
+<li><p>the output of <code>here::here()</code> will change because the location of the folder on the computer changed.</p></li>
+<li><p>my code will still run because inside the folder because the path to the data didn’t change.</p></li>
+</ul>
+</section>
+<section id="relative-paths-in-r-2" class="slide level2">
+<h2>Relative paths in R</h2>
+<p><br></p>
+<p>Another good thing: <code>{here}</code> will also work in you open the script outside of an RStudio project, and will work on all operating systems (e.g no paths problems because of Windows or Mac).</p>
+<p><br></p>
+<p>Get more info on <code>{here}</code> on <a href="https://here.r-lib.org/">the package’s website</a>.</p>
+</section></section>
+<section>
+<section id="keep-a-clean-session" class="title-slide slide level1 center">
+<h1>Keep a clean session</h1>
+
+</section>
+<section id="remove-all-objects" class="slide level2">
+<h2>Remove all objects</h2>
+<p><br></p>
+<p>Last but not least: how do you ensure your code will run in a fresh session on another laptop?</p>
+<p><br></p>
+<p>If you already use <code>rm(list = ls())</code> at the beginning of your script, good job!</p>
+<p><br></p>
+<p><i class="fa-solid fa-arrow-right" aria-label="arrow-right"></i> &nbsp; <strong>you’re wrong!</strong></p>
+</section>
+<section id="problem" class="slide level2">
+<h2>Problem</h2>
+<p><br></p>
+<p>What does <code>rm(list = ls())</code> do?</p>
+<ul>
+<li><p><code>rm()</code>: remove some objects from the environment</p></li>
+<li><p><code>ls()</code>: list all objects in the environment</p></li>
+</ul>
+<p><br></p>
+<p>So <code>rm(list = ls())</code> removes all the objects from the environment: datasets, lists, etc.</p>
+<p><br></p>
+<p>What about loaded packages? What about options set with <code>options()</code>?</p>
+</section>
+<section id="problem-1" class="slide level2">
+<h2>Problem</h2>
+<p><br></p>
+<p><code>rm(list = ls())</code> does NOT create a fresh R session. Try it yourself:</p>
+<ol type="1">
+<li><p>load any package, e.g <code>dplyr</code></p></li>
+<li><p>use it, e.g <code>filter(iris, Species == "setosa")</code></p></li>
+<li><p>run <code>rm(list = ls())</code></p></li>
+<li><p>try again <code>filter(iris, Species == "setosa")</code></p></li>
+</ol>
+<p><br></p>
+<p>As you can see, it still works, meaning that the package was not unloaded.</p>
+</section>
+<section id="solution-1" class="slide level2">
+<h2>Solution</h2>
+<p><br></p>
+<p>Instead of putting <code>rm(list = ls())</code> at the beginning of the script, you should completely restart the RStudio session to be sure your code can run in a fresh session:</p>
+<ul>
+<li><p>Session &gt; Restart R;</p></li>
+<li><p>or Ctrl + Shift + F10;</p></li>
+<li><p>or <code>rstudioapi::restartSession()</code>.</p></li>
+</ul>
 <div class="footer footer-default">
 
 </div>
-</section>
+</section></section>
     </div>
   </div>
 

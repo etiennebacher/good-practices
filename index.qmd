@@ -33,6 +33,10 @@ execute:
 
 3. Make your paths reproducible with `{here}`
 
+<br>
+
+4. Keep a clean session
+
 
 # Validate your data with `{validate}`
 
@@ -471,3 +475,137 @@ Learn more about `{renv}` capabilities and limitations on [the package's website
 
 # Make your paths reproducible with `{here}`
 
+## Paths
+
+<br>
+
+Paths are the devil of reproducibility.
+
+<br>
+
+You can use as many best practices as you want, if you use ***absolute paths***, it is useless.
+
+## Paths
+
+<br><br>
+
+**Absolute path:** path that is specific to your computer because it *starts at the root of a computer*.
+
+Ex: "C:/Users/etienne/Desktop/myproject/mydata/WDI"
+
+<br>
+
+**Relative path:** path that is specific to a project because it starts at the root of the project.
+
+Ex: "mydata/WDI"
+
+## Relative paths in R
+
+<br>
+
+Use the package `{here}`:
+
+<br>
+
+* to know the working directory:
+
+```{r eval = TRUE}
+here::here()
+```
+
+<br>
+
+* to use some data, script, etc.:
+
+```{r eval=TRUE}
+mydata <- read.csv(here::here("data/WDI/gapminder.csv"))
+```
+
+## Relative paths in R
+
+<br> <br>
+
+If I give the folder "good-practices" to someone else:
+
+* the output of `here::here()` will change because the location of the folder on the computer changed.
+
+* my code will still run because inside the folder because the path to the data didn't change.
+
+## Relative paths in R
+
+<br>
+
+Another good thing: `{here}` will also work in you open the script outside of an RStudio project, and will work on all operating systems (e.g no paths problems because of Windows or Mac).
+
+<br>
+
+Get more info on `{here}` on [the package's website](https://here.r-lib.org/).
+
+
+# Keep a clean session
+
+## Remove all objects
+
+<br>
+
+Last but not least: how do you ensure your code will run in a fresh session on another laptop?
+
+<br>
+
+If you already use `rm(list = ls())` at the beginning of your script, good job!
+
+<br>
+
+{{< fa arrow-right >}} &nbsp; **you're wrong!**
+
+
+## Problem
+
+<br>
+
+What does `rm(list = ls())` do?
+
+* `rm()`: remove some objects from the environment
+
+* `ls()`: list all objects in the environment
+
+<br>
+
+So `rm(list = ls())` removes all the objects from the environment: datasets, lists, etc.
+
+<br>
+
+What about loaded packages? What about options set with `options()`?
+
+
+## Problem
+
+<br>
+
+`rm(list = ls())` does NOT create a fresh R session. Try it yourself:
+
+1. load any package, e.g `dplyr`
+
+2. use it, e.g `filter(iris, Species == "setosa")`
+
+3. run `rm(list = ls())`
+
+4. try again `filter(iris, Species == "setosa")`
+
+<br>
+
+As you can see, it still works, meaning that the package was not unloaded.
+
+
+## Solution 
+
+<br> 
+
+Instead of putting `rm(list = ls())` at the beginning of the script, you should 
+completely restart the RStudio session to be sure your code can run in a fresh session:
+
+* Session > Restart R;
+
+* or Ctrl + Shift + F10;
+
+* or `rstudioapi::restartSession()`.
