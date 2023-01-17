@@ -17,7 +17,7 @@ format:
    slide-number: true
    
 execute:
-  eval: false
+  eval: true
   echo: true
 ---
 
@@ -179,7 +179,7 @@ There are a lot of other helpers:
 
 <br>
 
-See more details in the [The Data Validation Cookbook](https://data-cleaning.github.io/validate/).
+See more details in the [The Data Validation Cookbook](https://data-cleaning.github.io/validate/){.external target="_blank"}.
 
 
 # Make your R environment reproducible with `{renv}`
@@ -234,7 +234,7 @@ Even the most used packages in R can change a lot over the years (e.g `tidyverse
 
 <br>
 
-It is ***your*** responsability to make your scripts reproducible. If I take your script 4 years later, I should be able to run them.
+It is ***your*** responsability to make your scripts reproducible. If I take your script 4 years later, I should be able to run it.
 
 <br>
 
@@ -271,12 +271,12 @@ When you give the project to someone else, they will be able to restore it with 
 
 <br>
 
-4. If you come back to this project later, or if you share this project, run `restore()` the packages as they were when you used them.
+4. If you come back to this project later, or if you share this project, run `restore()` to get the packages as they were when you used them.
 
 
 ## Example
 
-Let's take the example of `gapminder` again. We import two packages: `gapminder` and `countrycode`:
+Let's take the example of `gapminder` again. We import two packages, `gapminder` and `countrycode`:
 
 ```{r}
 library(gapminder)
@@ -418,7 +418,7 @@ library(dplyr)
 
 Now that we imported a new package, let's see the status of `{renv}`:
 
-```{r}
+```{r eval = FALSE}
 renv::status()
 ```
 
@@ -470,7 +470,7 @@ If your packages depend on external software (e.g `RSelenium` uses Java), `{renv
 
 <br>
 
-Learn more about `{renv}` capabilities and limitations on [the package's website](https://rstudio.github.io/renv).
+Learn more about `{renv}` capabilities and limitations on [the package's website](https://rstudio.github.io/renv){.external target="_blank"}.
 
 
 # Make your paths reproducible with `{here}`
@@ -539,7 +539,7 @@ Another good thing: `{here}` will also work in you open the script outside of an
 
 <br>
 
-Get more info on `{here}` on [the package's website](https://here.r-lib.org/).
+Get more info on `{here}` on [the package's website](https://here.r-lib.org/){.external target="_blank"}.
 
 
 # Keep a clean session
@@ -609,3 +609,18 @@ completely restart the RStudio session to be sure your code can run in a fresh s
 * or Ctrl + Shift + F10;
 
 * or `rstudioapi::restartSession()`.
+
+
+# Thanks!
+
+<br>
+
+Source code for slides and exercises: 
+
+[https://github.com/etiennebacher/good-practices](https://github.com/etiennebacher/good-practices){.external target="_blank"}
+
+<br>
+
+Comments, typos, etc.: 
+
+[https://github.com/etiennebacher/good-practices/issues](https://github.com/etiennebacher/good-practices/issues){.external target="_blank"}

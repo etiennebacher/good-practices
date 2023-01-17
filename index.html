@@ -483,6 +483,17 @@ Etienne Bacher
 <span id="cb1-4"><a href="#cb1-4"></a>gapminder<span class="sc">$</span>iso <span class="ot">&lt;-</span> <span class="fu">countrycode</span>(gapminder<span class="sc">$</span>country, <span class="st">"country.name"</span>, <span class="st">"iso3c"</span>)</span>
 <span id="cb1-5"><a href="#cb1-5"></a></span>
 <span id="cb1-6"><a href="#cb1-6"></a><span class="fu">head</span>(gapminder)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  country     continent  year lifeExp      pop gdpPercap iso  
+  &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt; &lt;chr&gt;
+1 Afghanistan Asia       1952    28.8  8425333      779. AFG  
+2 Afghanistan Asia       1957    30.3  9240934      821. AFG  
+3 Afghanistan Asia       1962    32.0 10267083      853. AFG  
+4 Afghanistan Asia       1967    34.0 11537966      836. AFG  
+5 Afghanistan Asia       1972    36.1 13079460      740. AFG  
+6 Afghanistan Asia       1977    38.4 14880372      786. AFG  </code></pre>
+</div>
 </div>
 </section>
 <section class="slide level2">
@@ -491,19 +502,19 @@ Etienne Bacher
 <li>Define a series of expectations, or <strong><em>rules</em></strong>, with <code>validator()</code>:</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">library</span>(validate)</span>
-<span id="cb2-2"><a href="#cb2-2"></a></span>
-<span id="cb2-3"><a href="#cb2-3"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
-<span id="cb2-4"><a href="#cb2-4"></a>  <span class="co"># Ensure that all ISO-3 codes have 3 letters</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a>  <span class="fu">field_length</span>(iso, <span class="at">n =</span> <span class="dv">3</span>),</span>
-<span id="cb2-6"><a href="#cb2-6"></a>  </span>
-<span id="cb2-7"><a href="#cb2-7"></a>  <span class="co"># Ensure that there are no duplicated combination of iso-year</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a>  <span class="fu">is_unique</span>(iso, year),</span>
-<span id="cb2-9"><a href="#cb2-9"></a>  </span>
-<span id="cb2-10"><a href="#cb2-10"></a>  <span class="co"># Ensure that year starts at 1952 and doesn't have any missing values</span></span>
-<span id="cb2-11"><a href="#cb2-11"></a>  <span class="fu">min</span>(year) <span class="sc">==</span> <span class="dv">1952</span>,</span>
-<span id="cb2-12"><a href="#cb2-12"></a>  <span class="sc">!</span><span class="fu">is.na</span>(year)</span>
-<span id="cb2-13"><a href="#cb2-13"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(validate)</span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
+<span id="cb3-4"><a href="#cb3-4"></a>  <span class="co"># Ensure that all ISO-3 codes have 3 letters</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>  <span class="fu">field_length</span>(iso, <span class="at">n =</span> <span class="dv">3</span>),</span>
+<span id="cb3-6"><a href="#cb3-6"></a>  </span>
+<span id="cb3-7"><a href="#cb3-7"></a>  <span class="co"># Ensure that there are no duplicated combination of iso-year</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a>  <span class="fu">is_unique</span>(iso, year),</span>
+<span id="cb3-9"><a href="#cb3-9"></a>  </span>
+<span id="cb3-10"><a href="#cb3-10"></a>  <span class="co"># Ensure that year starts at 1952 and doesn't have any missing values</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a>  <span class="fu">min</span>(year) <span class="sc">==</span> <span class="dv">1952</span>,</span>
+<span id="cb3-12"><a href="#cb3-12"></a>  <span class="sc">!</span><span class="fu">is.na</span>(year)</span>
+<span id="cb3-13"><a href="#cb3-13"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section class="slide level2">
@@ -512,10 +523,17 @@ Etienne Bacher
 <li>Pass your dataset through these rules with <code>confront()</code>:</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>x <span class="ot">&lt;-</span> <span class="fu">confront</span>(gapminder, rules) <span class="sc">|&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">summary</span>() </span>
-<span id="cb3-3"><a href="#cb3-3"></a></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="fu">head</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>x <span class="ot">&lt;-</span> <span class="fu">confront</span>(gapminder, rules) <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">summary</span>() </span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="fu">head</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  name items passes fails nNA error warning               expression
+1   V1  1704   1704     0   0 FALSE   FALSE field_length(iso, n = 3)
+2   V2  1704   1704     0   0 FALSE   FALSE     is_unique(iso, year)
+3   V3     1      1     0   0 FALSE   FALSE        min(year) == 1952
+4   V4  1704   1704     0   0 FALSE   FALSE             !is.na(year)</code></pre>
+</div>
 </div>
 </section>
 <section class="slide level2">
@@ -524,7 +542,7 @@ Etienne Bacher
 <li>Check that all rules are respected (or generate an error if there’s a failing test):</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">stopifnot</span>(<span class="fu">unique</span>(x<span class="sc">$</span>fails) <span class="sc">==</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">stopifnot</span>(<span class="fu">unique</span>(x<span class="sc">$</span>fails) <span class="sc">==</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section class="slide level2">
@@ -533,15 +551,21 @@ Etienne Bacher
 <p><br></p>
 <p>Instead of writing <code>var1 &gt;= 0</code>, <code>var2 &gt;= 0</code>, …, you can use <code>var_group()</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
-<span id="cb5-2"><a href="#cb5-2"></a>  <span class="at">positive_vars :=</span> <span class="fu">var_group</span>(lifeExp, pop, gdpPercap),</span>
-<span id="cb5-3"><a href="#cb5-3"></a>  positive_vars <span class="sc">&gt;=</span> <span class="dv">0</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a>)</span>
-<span id="cb5-5"><a href="#cb5-5"></a></span>
-<span id="cb5-6"><a href="#cb5-6"></a>x <span class="ot">&lt;-</span> <span class="fu">confront</span>(gapminder, rules) <span class="sc">|&gt;</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a>  <span class="fu">summary</span>() </span>
-<span id="cb5-8"><a href="#cb5-8"></a></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="fu">head</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="at">positive_vars :=</span> <span class="fu">var_group</span>(lifeExp, pop, gdpPercap),</span>
+<span id="cb7-3"><a href="#cb7-3"></a>  positive_vars <span class="sc">&gt;=</span> <span class="dv">0</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a>)</span>
+<span id="cb7-5"><a href="#cb7-5"></a></span>
+<span id="cb7-6"><a href="#cb7-6"></a>x <span class="ot">&lt;-</span> <span class="fu">confront</span>(gapminder, rules) <span class="sc">|&gt;</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a>  <span class="fu">summary</span>() </span>
+<span id="cb7-8"><a href="#cb7-8"></a></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="fu">head</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  name items passes fails nNA error warning              expression
+1 V2.1  1704   1704     0   0 FALSE   FALSE   lifeExp - 0 &gt;= -1e-08
+2 V2.2  1704   1704     0   0 FALSE   FALSE       pop - 0 &gt;= -1e-08
+3 V2.3  1704   1704     0   0 FALSE   FALSE gdpPercap - 0 &gt;= -1e-08</code></pre>
+</div>
 </div>
 </section>
 <section class="slide level2">
@@ -555,7 +579,7 @@ Etienne Bacher
 <li>many others…</li>
 </ul>
 <p><br></p>
-<p>See more details in the <a href="https://data-cleaning.github.io/validate/">The Data Validation Cookbook</a>.</p>
+<p>See more details in the <a href="https://data-cleaning.github.io/validate/" class="external" target="_blank">The Data Validation Cookbook</a>.</p>
 </section></section>
 <section>
 <section id="make-your-r-environment-reproducible-with-renv" class="title-slide slide level1 center">
@@ -598,7 +622,7 @@ Etienne Bacher
 <p><br></p>
 <p>Even the most used packages in R can change a lot over the years (e.g <code>tidyverse</code>).</p>
 <p><br></p>
-<p>It is <strong><em>your</em></strong> responsability to make your scripts reproducible. If I take your script 4 years later, I should be able to run them.</p>
+<p>It is <strong><em>your</em></strong> responsability to make your scripts reproducible. If I take your script 4 years later, I should be able to run it.</p>
 <p><br></p>
 <p>Problem: how to deal with evolving packages?</p>
 </section>
@@ -627,19 +651,30 @@ Etienne Bacher
 </ol>
 <p><br></p>
 <ol start="4" type="1">
-<li>If you come back to this project later, or if you share this project, run <code>restore()</code> the packages as they were when you used them.</li>
+<li>If you come back to this project later, or if you share this project, run <code>restore()</code> to get the packages as they were when you used them.</li>
 </ol>
 </section>
 <section id="example-1" class="slide level2">
 <h2>Example</h2>
-<p>Let’s take the example of <code>gapminder</code> again. We import two packages: <code>gapminder</code> and <code>countrycode</code>:</p>
+<p>Let’s take the example of <code>gapminder</code> again. We import two packages, <code>gapminder</code> and <code>countrycode</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">library</span>(gapminder)</span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="fu">library</span>(countrycode)</span>
-<span id="cb6-3"><a href="#cb6-3"></a></span>
-<span id="cb6-4"><a href="#cb6-4"></a>gapminder<span class="sc">$</span>iso <span class="ot">&lt;-</span> <span class="fu">countrycode</span>(gapminder<span class="sc">$</span>country, <span class="st">"country.name"</span>, <span class="st">"iso3c"</span>)</span>
-<span id="cb6-5"><a href="#cb6-5"></a></span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="fu">head</span>(gapminder)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">library</span>(gapminder)</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="fu">library</span>(countrycode)</span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a>gapminder<span class="sc">$</span>iso <span class="ot">&lt;-</span> <span class="fu">countrycode</span>(gapminder<span class="sc">$</span>country, <span class="st">"country.name"</span>, <span class="st">"iso3c"</span>)</span>
+<span id="cb9-5"><a href="#cb9-5"></a></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="fu">head</span>(gapminder)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  country     continent  year lifeExp      pop gdpPercap iso  
+  &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt; &lt;chr&gt;
+1 Afghanistan Asia       1952    28.8  8425333      779. AFG  
+2 Afghanistan Asia       1957    30.3  9240934      821. AFG  
+3 Afghanistan Asia       1962    32.0 10267083      853. AFG  
+4 Afghanistan Asia       1967    34.0 11537966      836. AFG  
+5 Afghanistan Asia       1972    36.1 13079460      740. AFG  
+6 Afghanistan Asia       1977    38.4 14880372      786. AFG  </code></pre>
+</div>
 </div>
 </section>
 <section class="slide level2">
@@ -648,68 +683,68 @@ Etienne Bacher
 <li>Initialize <code>{renv}</code> whenever you want with <code>init()</code>:</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>renv<span class="sc">::</span><span class="fu">init</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>renv<span class="sc">::</span><span class="fu">init</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="sc">*</span> Initializing project ...</span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="sc">*</span> Discovering package dependencies ... Done<span class="sc">!</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="er">*</span> Copying packages into the cache ... Done<span class="sc">!</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a>The following <span class="fu">package</span>(s) will be updated <span class="cf">in</span> the lockfile<span class="sc">:</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a></span>
-<span id="cb8-6"><a href="#cb8-6"></a><span class="co"># CRAN ===============================</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a><span class="sc">-</span> R6            [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">2</span>.<span class="fl">5.1</span>]</span>
-<span id="cb8-8"><a href="#cb8-8"></a><span class="sc">-</span> base64enc     [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="fl">0.1</span><span class="dv">-3</span>]</span>
-<span id="cb8-9"><a href="#cb8-9"></a><span class="sc">-</span> bslib         [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">4.2</span>]</span>
-<span id="cb8-10"><a href="#cb8-10"></a><span class="sc">-</span> cachem        [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">0.6</span>]</span>
-<span id="cb8-11"><a href="#cb8-11"></a><span class="sc">-</span> cli           [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">3</span>.<span class="fl">5.0</span>]</span>
-<span id="cb8-12"><a href="#cb8-12"></a><span class="sc">-</span> countrycode   [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">4.0</span>]</span>
-<span id="cb8-13"><a href="#cb8-13"></a><span class="sc">-</span> digest        [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">6.31</span>]</span>
-<span id="cb8-14"><a href="#cb8-14"></a><span class="sc">-</span> ellipsis      [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">3.2</span>]</span>
-<span id="cb8-15"><a href="#cb8-15"></a><span class="sc">-</span> evaluate      [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="fl">0.19</span>]</span>
-<span id="cb8-16"><a href="#cb8-16"></a><span class="sc">-</span> fansi         [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">0.3</span>]</span>
-<span id="cb8-17"><a href="#cb8-17"></a><span class="sc">-</span> fastmap       [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">1.0</span>]</span>
-<span id="cb8-18"><a href="#cb8-18"></a><span class="sc">-</span> fs            [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">5.2</span>]</span>
-<span id="cb8-19"><a href="#cb8-19"></a><span class="sc">-</span> gapminder     [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">3.0</span>]</span>
-<span id="cb8-20"><a href="#cb8-20"></a><span class="sc">-</span> glue          [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">6.2</span>]</span>
-<span id="cb8-21"><a href="#cb8-21"></a><span class="sc">-</span> highr         [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="fl">0.10</span>]</span>
-<span id="cb8-22"><a href="#cb8-22"></a><span class="sc">-</span> htmltools     [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">5.4</span>]</span>
-<span id="cb8-23"><a href="#cb8-23"></a><span class="sc">-</span> jquerylib     [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">1.4</span>]</span>
-<span id="cb8-24"><a href="#cb8-24"></a><span class="sc">-</span> jsonlite      [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">8.4</span>]</span>
-<span id="cb8-25"><a href="#cb8-25"></a><span class="sc">-</span> lifecycle     [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">0.3</span>]</span>
-<span id="cb8-26"><a href="#cb8-26"></a><span class="sc">-</span> magrittr      [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">2</span>.<span class="fl">0.3</span>]</span>
-<span id="cb8-27"><a href="#cb8-27"></a><span class="sc">-</span> memoise       [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">2</span>.<span class="fl">0.1</span>]</span>
-<span id="cb8-28"><a href="#cb8-28"></a><span class="sc">-</span> mime          [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="fl">0.12</span>]</span>
-<span id="cb8-29"><a href="#cb8-29"></a><span class="sc">-</span> pillar        [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">8.1</span>]</span>
-<span id="cb8-30"><a href="#cb8-30"></a><span class="sc">-</span> pkgconfig     [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">2</span>.<span class="fl">0.3</span>]</span>
-<span id="cb8-31"><a href="#cb8-31"></a><span class="sc">-</span> rappdirs      [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">3.3</span>]</span>
-<span id="cb8-32"><a href="#cb8-32"></a><span class="sc">-</span> renv          [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">16.0</span>]</span>
-<span id="cb8-33"><a href="#cb8-33"></a><span class="sc">-</span> rmarkdown     [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="fl">2.19</span>]</span>
-<span id="cb8-34"><a href="#cb8-34"></a><span class="sc">-</span> sass          [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">4.4</span>]</span>
-<span id="cb8-35"><a href="#cb8-35"></a><span class="sc">-</span> settings      [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">2.7</span>]</span>
-<span id="cb8-36"><a href="#cb8-36"></a><span class="sc">-</span> stringi       [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">7.8</span>]</span>
-<span id="cb8-37"><a href="#cb8-37"></a><span class="sc">-</span> stringr       [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">5.0</span>]</span>
-<span id="cb8-38"><a href="#cb8-38"></a><span class="sc">-</span> tibble        [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">3</span>.<span class="fl">1.8</span>]</span>
-<span id="cb8-39"><a href="#cb8-39"></a><span class="sc">-</span> tinytex       [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="fl">0.43</span>]</span>
-<span id="cb8-40"><a href="#cb8-40"></a><span class="sc">-</span> utf8          [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">2.2</span>]</span>
-<span id="cb8-41"><a href="#cb8-41"></a><span class="sc">-</span> validate      [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">1.1</span>]</span>
-<span id="cb8-42"><a href="#cb8-42"></a><span class="sc">-</span> vctrs         [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">5.1</span>]</span>
-<span id="cb8-43"><a href="#cb8-43"></a><span class="sc">-</span> xfun          [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="fl">0.36</span>]</span>
-<span id="cb8-44"><a href="#cb8-44"></a><span class="sc">-</span> yaml          [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">2</span>.<span class="fl">3.6</span>]</span>
-<span id="cb8-45"><a href="#cb8-45"></a></span>
-<span id="cb8-46"><a href="#cb8-46"></a><span class="co"># GitHub =============================</span></span>
-<span id="cb8-47"><a href="#cb8-47"></a><span class="sc">-</span> rlang         [<span class="sc">*</span> <span class="ot">-&gt;</span> tidyverse<span class="sc">/</span>rlang<span class="sc">@</span>HEAD]</span>
-<span id="cb8-48"><a href="#cb8-48"></a></span>
-<span id="cb8-49"><a href="#cb8-49"></a><span class="co"># https://yihui.r-universe.dev =======</span></span>
-<span id="cb8-50"><a href="#cb8-50"></a><span class="sc">-</span> knitr         [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">41.8</span>]</span>
-<span id="cb8-51"><a href="#cb8-51"></a></span>
-<span id="cb8-52"><a href="#cb8-52"></a>The version of R recorded <span class="cf">in</span> the lockfile will be updated<span class="sc">:</span></span>
-<span id="cb8-53"><a href="#cb8-53"></a><span class="sc">-</span> R             [<span class="sc">*</span>] <span class="ot">-&gt;</span> [<span class="dv">4</span>.<span class="fl">2.2</span>]</span>
-<span id="cb8-54"><a href="#cb8-54"></a></span>
-<span id="cb8-55"><a href="#cb8-55"></a><span class="sc">*</span> Lockfile written to <span class="st">'C:/Users/etienne/Desktop/Divers/good-practices/renv.lock'</span>.</span>
-<span id="cb8-56"><a href="#cb8-56"></a></span>
-<span id="cb8-57"><a href="#cb8-57"></a>Restarting R session...</span>
-<span id="cb8-58"><a href="#cb8-58"></a></span>
-<span id="cb8-59"><a href="#cb8-59"></a><span class="sc">*</span> Project <span class="st">'C:/Users/etienne/Desktop/Divers/good-practices'</span> loaded. [renv <span class="dv">0</span>.<span class="fl">16.0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="sc">*</span> Initializing project ...</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="sc">*</span> Discovering package dependencies ... Done<span class="sc">!</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="er">*</span> Copying packages into the cache ... Done<span class="sc">!</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a>The following <span class="fu">package</span>(s) will be updated <span class="cf">in</span> the lockfile<span class="sc">:</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co"># CRAN ===============================</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="sc">-</span> R6            [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">2</span>.<span class="fl">5.1</span>]</span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="sc">-</span> base64enc     [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="fl">0.1</span><span class="dv">-3</span>]</span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="sc">-</span> bslib         [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">4.2</span>]</span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="sc">-</span> cachem        [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">0.6</span>]</span>
+<span id="cb12-11"><a href="#cb12-11"></a><span class="sc">-</span> cli           [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">3</span>.<span class="fl">5.0</span>]</span>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="sc">-</span> countrycode   [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">4.0</span>]</span>
+<span id="cb12-13"><a href="#cb12-13"></a><span class="sc">-</span> digest        [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">6.31</span>]</span>
+<span id="cb12-14"><a href="#cb12-14"></a><span class="sc">-</span> ellipsis      [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">3.2</span>]</span>
+<span id="cb12-15"><a href="#cb12-15"></a><span class="sc">-</span> evaluate      [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="fl">0.19</span>]</span>
+<span id="cb12-16"><a href="#cb12-16"></a><span class="sc">-</span> fansi         [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">0.3</span>]</span>
+<span id="cb12-17"><a href="#cb12-17"></a><span class="sc">-</span> fastmap       [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">1.0</span>]</span>
+<span id="cb12-18"><a href="#cb12-18"></a><span class="sc">-</span> fs            [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">5.2</span>]</span>
+<span id="cb12-19"><a href="#cb12-19"></a><span class="sc">-</span> gapminder     [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">3.0</span>]</span>
+<span id="cb12-20"><a href="#cb12-20"></a><span class="sc">-</span> glue          [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">6.2</span>]</span>
+<span id="cb12-21"><a href="#cb12-21"></a><span class="sc">-</span> highr         [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="fl">0.10</span>]</span>
+<span id="cb12-22"><a href="#cb12-22"></a><span class="sc">-</span> htmltools     [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">5.4</span>]</span>
+<span id="cb12-23"><a href="#cb12-23"></a><span class="sc">-</span> jquerylib     [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">1.4</span>]</span>
+<span id="cb12-24"><a href="#cb12-24"></a><span class="sc">-</span> jsonlite      [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">8.4</span>]</span>
+<span id="cb12-25"><a href="#cb12-25"></a><span class="sc">-</span> lifecycle     [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">0.3</span>]</span>
+<span id="cb12-26"><a href="#cb12-26"></a><span class="sc">-</span> magrittr      [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">2</span>.<span class="fl">0.3</span>]</span>
+<span id="cb12-27"><a href="#cb12-27"></a><span class="sc">-</span> memoise       [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">2</span>.<span class="fl">0.1</span>]</span>
+<span id="cb12-28"><a href="#cb12-28"></a><span class="sc">-</span> mime          [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="fl">0.12</span>]</span>
+<span id="cb12-29"><a href="#cb12-29"></a><span class="sc">-</span> pillar        [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">8.1</span>]</span>
+<span id="cb12-30"><a href="#cb12-30"></a><span class="sc">-</span> pkgconfig     [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">2</span>.<span class="fl">0.3</span>]</span>
+<span id="cb12-31"><a href="#cb12-31"></a><span class="sc">-</span> rappdirs      [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">3.3</span>]</span>
+<span id="cb12-32"><a href="#cb12-32"></a><span class="sc">-</span> renv          [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">16.0</span>]</span>
+<span id="cb12-33"><a href="#cb12-33"></a><span class="sc">-</span> rmarkdown     [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="fl">2.19</span>]</span>
+<span id="cb12-34"><a href="#cb12-34"></a><span class="sc">-</span> sass          [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">4.4</span>]</span>
+<span id="cb12-35"><a href="#cb12-35"></a><span class="sc">-</span> settings      [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">2.7</span>]</span>
+<span id="cb12-36"><a href="#cb12-36"></a><span class="sc">-</span> stringi       [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">7.8</span>]</span>
+<span id="cb12-37"><a href="#cb12-37"></a><span class="sc">-</span> stringr       [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">5.0</span>]</span>
+<span id="cb12-38"><a href="#cb12-38"></a><span class="sc">-</span> tibble        [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">3</span>.<span class="fl">1.8</span>]</span>
+<span id="cb12-39"><a href="#cb12-39"></a><span class="sc">-</span> tinytex       [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="fl">0.43</span>]</span>
+<span id="cb12-40"><a href="#cb12-40"></a><span class="sc">-</span> utf8          [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">2.2</span>]</span>
+<span id="cb12-41"><a href="#cb12-41"></a><span class="sc">-</span> validate      [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">1.1</span>]</span>
+<span id="cb12-42"><a href="#cb12-42"></a><span class="sc">-</span> vctrs         [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">5.1</span>]</span>
+<span id="cb12-43"><a href="#cb12-43"></a><span class="sc">-</span> xfun          [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="fl">0.36</span>]</span>
+<span id="cb12-44"><a href="#cb12-44"></a><span class="sc">-</span> yaml          [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">2</span>.<span class="fl">3.6</span>]</span>
+<span id="cb12-45"><a href="#cb12-45"></a></span>
+<span id="cb12-46"><a href="#cb12-46"></a><span class="co"># GitHub =============================</span></span>
+<span id="cb12-47"><a href="#cb12-47"></a><span class="sc">-</span> rlang         [<span class="sc">*</span> <span class="ot">-&gt;</span> tidyverse<span class="sc">/</span>rlang<span class="sc">@</span>HEAD]</span>
+<span id="cb12-48"><a href="#cb12-48"></a></span>
+<span id="cb12-49"><a href="#cb12-49"></a><span class="co"># https://yihui.r-universe.dev =======</span></span>
+<span id="cb12-50"><a href="#cb12-50"></a><span class="sc">-</span> knitr         [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">41.8</span>]</span>
+<span id="cb12-51"><a href="#cb12-51"></a></span>
+<span id="cb12-52"><a href="#cb12-52"></a>The version of R recorded <span class="cf">in</span> the lockfile will be updated<span class="sc">:</span></span>
+<span id="cb12-53"><a href="#cb12-53"></a><span class="sc">-</span> R             [<span class="sc">*</span>] <span class="ot">-&gt;</span> [<span class="dv">4</span>.<span class="fl">2.2</span>]</span>
+<span id="cb12-54"><a href="#cb12-54"></a></span>
+<span id="cb12-55"><a href="#cb12-55"></a><span class="sc">*</span> Lockfile written to <span class="st">'C:/Users/etienne/Desktop/Divers/good-practices/renv.lock'</span>.</span>
+<span id="cb12-56"><a href="#cb12-56"></a></span>
+<span id="cb12-57"><a href="#cb12-57"></a>Restarting R session...</span>
+<span id="cb12-58"><a href="#cb12-58"></a></span>
+<span id="cb12-59"><a href="#cb12-59"></a><span class="sc">*</span> Project <span class="st">'C:/Users/etienne/Desktop/Divers/good-practices'</span> loaded. [renv <span class="dv">0</span>.<span class="fl">16.0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section class="slide level2">
 
@@ -730,10 +765,10 @@ Etienne Bacher
 </ol>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>Error <span class="cf">in</span> <span class="fu">library</span>(dplyr) <span class="sc">:</span> there is no package called ‘dplyr’</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>Error <span class="cf">in</span> <span class="fu">library</span>(dplyr) <span class="sc">:</span> there is no package called ‘dplyr’</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><br></p>
 <p>Hum… weird, <code>dplyr</code> was installed on my laptop.</p>
 </section>
@@ -743,28 +778,28 @@ Etienne Bacher
 <p><code>{renv}</code> creates a sort of “local library” in your project, so you need to reinstall <code>dplyr</code> first:</p>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section class="slide level2">
 
 <p>Now that we imported a new package, let’s see the status of <code>{renv}</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>renv<span class="sc">::</span><span class="fu">status</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>renv<span class="sc">::</span><span class="fu">status</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>The following <span class="fu">package</span>(s) are installed but not recorded <span class="cf">in</span> the lockfile<span class="sc">:</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a>             _</span>
-<span id="cb14-3"><a href="#cb14-3"></a>  withr        [<span class="dv">2</span>.<span class="fl">5.0</span>]</span>
-<span id="cb14-4"><a href="#cb14-4"></a>  dplyr        [<span class="dv">1</span>.<span class="fl">0.10</span>]</span>
-<span id="cb14-5"><a href="#cb14-5"></a>  generics     [<span class="dv">0</span>.<span class="fl">1.3</span>]</span>
-<span id="cb14-6"><a href="#cb14-6"></a>  tidyselect   [<span class="dv">1</span>.<span class="fl">2.0</span>]</span>
-<span id="cb14-7"><a href="#cb14-7"></a></span>
-<span id="cb14-8"><a href="#cb14-8"></a>Use <span class="st">`</span><span class="at">renv::snapshot()</span><span class="st">`</span> to add these packages to your lockfile.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>The following <span class="fu">package</span>(s) are installed but not recorded <span class="cf">in</span> the lockfile<span class="sc">:</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a>             _</span>
+<span id="cb18-3"><a href="#cb18-3"></a>  withr        [<span class="dv">2</span>.<span class="fl">5.0</span>]</span>
+<span id="cb18-4"><a href="#cb18-4"></a>  dplyr        [<span class="dv">1</span>.<span class="fl">0.10</span>]</span>
+<span id="cb18-5"><a href="#cb18-5"></a>  generics     [<span class="dv">0</span>.<span class="fl">1.3</span>]</span>
+<span id="cb18-6"><a href="#cb18-6"></a>  tidyselect   [<span class="dv">1</span>.<span class="fl">2.0</span>]</span>
+<span id="cb18-7"><a href="#cb18-7"></a></span>
+<span id="cb18-8"><a href="#cb18-8"></a>Use <span class="st">`</span><span class="at">renv::snapshot()</span><span class="st">`</span> to add these packages to your lockfile.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section class="slide level2">
 
@@ -772,19 +807,19 @@ Etienne Bacher
 <li>Run <code>snapshot()</code> from time to time to update the lockfile;</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>renv<span class="sc">::</span><span class="fu">snapshot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>renv<span class="sc">::</span><span class="fu">snapshot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>The following <span class="fu">package</span>(s) will be updated <span class="cf">in</span> the lockfile<span class="sc">:</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a></span>
-<span id="cb16-3"><a href="#cb16-3"></a><span class="co"># CRAN ===============================</span></span>
-<span id="cb16-4"><a href="#cb16-4"></a><span class="sc">-</span> dplyr        [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">0.10</span>]</span>
-<span id="cb16-5"><a href="#cb16-5"></a><span class="sc">-</span> generics     [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">1.3</span>]</span>
-<span id="cb16-6"><a href="#cb16-6"></a><span class="sc">-</span> tidyselect   [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">2.0</span>]</span>
-<span id="cb16-7"><a href="#cb16-7"></a><span class="sc">-</span> withr        [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">2</span>.<span class="fl">5.0</span>]</span>
-<span id="cb16-8"><a href="#cb16-8"></a></span>
-<span id="cb16-9"><a href="#cb16-9"></a>Do you want to proceed? [y<span class="sc">/</span>N]<span class="sc">:</span> Y</span>
-<span id="cb16-10"><a href="#cb16-10"></a><span class="sc">*</span> Lockfile written to <span class="st">'C:/Users/etienne/Desktop/Divers/good-practices/renv.lock'</span>.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>The following <span class="fu">package</span>(s) will be updated <span class="cf">in</span> the lockfile<span class="sc">:</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a></span>
+<span id="cb20-3"><a href="#cb20-3"></a><span class="co"># CRAN ===============================</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="sc">-</span> dplyr        [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">0.10</span>]</span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="sc">-</span> generics     [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">0</span>.<span class="fl">1.3</span>]</span>
+<span id="cb20-6"><a href="#cb20-6"></a><span class="sc">-</span> tidyselect   [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">1</span>.<span class="fl">2.0</span>]</span>
+<span id="cb20-7"><a href="#cb20-7"></a><span class="sc">-</span> withr        [<span class="sc">*</span> <span class="ot">-&gt;</span> <span class="dv">2</span>.<span class="fl">5.0</span>]</span>
+<span id="cb20-8"><a href="#cb20-8"></a></span>
+<span id="cb20-9"><a href="#cb20-9"></a>Do you want to proceed? [y<span class="sc">/</span>N]<span class="sc">:</span> Y</span>
+<span id="cb20-10"><a href="#cb20-10"></a><span class="sc">*</span> Lockfile written to <span class="st">'C:/Users/etienne/Desktop/Divers/good-practices/renv.lock'</span>.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="good-to-know" class="slide level2">
 <h2>Good to know</h2>
@@ -793,7 +828,7 @@ Etienne Bacher
 <p><br></p>
 <p>If your packages depend on external software (e.g <code>RSelenium</code> uses Java), <code>{renv}</code> cannot install it for you.</p>
 <p><br></p>
-<p>Learn more about <code>{renv}</code> capabilities and limitations on <a href="https://rstudio.github.io/renv">the package’s website</a>.</p>
+<p>Learn more about <code>{renv}</code> capabilities and limitations on <a href="https://rstudio.github.io/renv" class="external" target="_blank">the package’s website</a>.</p>
 </section></section>
 <section>
 <section id="make-your-paths-reproducible-with-here" class="title-slide slide level1 center">
@@ -825,7 +860,7 @@ Etienne Bacher
 <li>to know the working directory:</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>here<span class="sc">::</span><span class="fu">here</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>here<span class="sc">::</span><span class="fu">here</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "C:/Users/etienne/Desktop/Divers/good-practices"</code></pre>
 </div>
@@ -835,7 +870,7 @@ Etienne Bacher
 <li>to use some data, script, etc.:</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>mydata <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/WDI/gapminder.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>mydata <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/WDI/gapminder.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="relative-paths-in-r-1" class="slide level2">
@@ -852,7 +887,7 @@ Etienne Bacher
 <p><br></p>
 <p>Another good thing: <code>{here}</code> will also work in you open the script outside of an RStudio project, and will work on all operating systems (e.g no paths problems because of Windows or Mac).</p>
 <p><br></p>
-<p>Get more info on <code>{here}</code> on <a href="https://here.r-lib.org/">the package’s website</a>.</p>
+<p>Get more info on <code>{here}</code> on <a href="https://here.r-lib.org/" class="external" target="_blank">the package’s website</a>.</p>
 </section></section>
 <section>
 <section id="keep-a-clean-session" class="title-slide slide level1 center">
@@ -903,10 +938,19 @@ Etienne Bacher
 <li><p>or Ctrl + Shift + F10;</p></li>
 <li><p>or <code>rstudioapi::restartSession()</code>.</p></li>
 </ul>
+</section></section>
+<section id="thanks" class="title-slide slide level1 center">
+<h1>Thanks!</h1>
+<p><br></p>
+<p>Source code for slides and exercises:</p>
+<p><a href="https://github.com/etiennebacher/good-practices" class="external" target="_blank">https://github.com/etiennebacher/good-practices</a></p>
+<p><br></p>
+<p>Comments, typos, etc.:</p>
+<p><a href="https://github.com/etiennebacher/good-practices/issues" class="external" target="_blank">https://github.com/etiennebacher/good-practices/issues</a></p>
 <div class="footer footer-default">
 
 </div>
-</section></section>
+</section>
     </div>
   </div>
 
