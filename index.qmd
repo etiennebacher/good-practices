@@ -8,7 +8,7 @@ institute: "LISER"
 format: 
  revealjs:
    incremental: false  
-   theme: [moon, custom.scss]
+   theme: [night, custom.scss]
    pdf-separate-fragments: true
    strip-comments: true
    highlight-style: atom-one
