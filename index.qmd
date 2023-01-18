@@ -56,13 +56,6 @@ Sometimes we do some mistakes that can have **big consequences**.
 <img src="img/retraction-article.png">
 </div>
 
----
-
-<br><br><br><br>
-
-> Everyone does coding mistakes; the important thing is whether you do your best to reduce them.
->
-> -- <cite>Me</cite>
 
 --- 
 
@@ -70,8 +63,8 @@ Sometimes we do some mistakes that can have **big consequences**.
 
 <br>
 
-`{validate}` is an R package that is very useful to ensure that your code has produced the
-right dataset.
+`{validate}` is an R package whose goal is to ensure that your code has produced
+the expected output.
 
 <br>
 
@@ -121,8 +114,7 @@ rules <- validator(
   # Ensure that there are no duplicated combination of iso-year
   is_unique(iso, year),
   
-  # Ensure that year starts at 1952 and doesn't have any missing values
-  min(year) == 1952,
+  # Ensure that year doesn't have any missing values
   !is.na(year)
 )
 ```
@@ -174,7 +166,7 @@ There are a lot of other helpers:
 
 * `in_range()`: useful for e.g percentages
 * `field_format()` for regular expressions
-* `is_linear_sequence()`: useful to check if there are some gaps in a series
+* `is_linear_sequence()`: useful to check if there are some gaps in time series
 * many others...
 
 <br>
@@ -186,16 +178,6 @@ See more details in the [The Data Validation Cookbook](https://data-cleaning.git
 
 ---
 
-<br><br><br><br>
-
-> The greatest thing with R is the number of packages available.
->
-> The worst thing with R is the number of packages available.
-> 
-> -- Me
-
----
-
 ## Packages in R
 
 <br>
@@ -203,6 +185,8 @@ See more details in the [The Data Validation Cookbook](https://data-cleaning.git
 Packages make our life simpler by not having to reinvent the wheel.
 
 <br>
+
+..
 
 But ***packages evolve!*** Between two versions of a same package:
 
@@ -224,7 +208,12 @@ Two months later, I couldn't run my code anymore because a package I used to ext
 
 <br>
 
-{{< fa arrow-right >}} &nbsp; choose your packages wisely
+{{< fa arrow-right >}} &nbsp; Two lessons:
+
+1. choose your packages wisely: better to use popular and actively developed packages;
+
+2. use some tools to keep the version of the packages you used.
+
 
 ## Packages in R
 
@@ -252,7 +241,7 @@ Idea: create a *lockfile* that contains the version of all the packages you used
 
 <br>
 
-When you give the project to someone else, they will be able to restore it with the exact same versions.
+When you give the project to someone else, they will be able to restore it with the exact same package versions.
 
 
 ## How does it work?
@@ -361,7 +350,7 @@ Restarting R session...
 
 ---
 
-<br>
+<br> <br>
 
 This will create:
 
@@ -416,6 +405,8 @@ library(dplyr)
 
 ---
 
+<br>
+
 Now that we imported a new package, let's see the status of `{renv}`:
 
 ```{r eval = FALSE}
@@ -436,6 +427,8 @@ Use `renv::snapshot()` to add these packages to your lockfile.
 ```
 
 ---
+
+<br>
 
 3. Run `snapshot()` from time to time to update the lockfile;
 
@@ -460,13 +453,13 @@ Do you want to proceed? [y/N]: Y
 
 ## Good to know
 
-<br>
+<br> <br>
 
 **`{renv}` is not a panacea for reproducibility**.
 
 <br>
 
-If your packages depend on external software (e.g `RSelenium` uses Java), `{renv}` cannot install it for you.
+If you use some packages that depend on external software (e.g `RSelenium` uses Java), `{renv}` cannot install this software for you.
 
 <br>
 
@@ -477,7 +470,7 @@ Learn more about `{renv}` capabilities and limitations on [the package's website
 
 ## Paths
 
-<br>
+<br> <br>
 
 Paths are the devil of reproducibility.
 
@@ -485,17 +478,18 @@ Paths are the devil of reproducibility.
 
 You can use as many best practices as you want, if you use ***absolute paths***, it is useless.
 
+
 ## Paths
 
 <br><br>
 
-**Absolute path:** path that is specific to your computer because it *starts at the root of a computer*.
+**Absolute path:** path that is specific to your computer because it starts *at the root of a computer*.
 
 Ex: "C:/Users/etienne/Desktop/myproject/mydata/WDI"
 
 <br>
 
-**Relative path:** path that is specific to a project because it starts at the root of the project.
+**Relative path:** path that is specific to a project because it starts *at the root of the project*.
 
 Ex: "mydata/WDI"
 
@@ -525,17 +519,25 @@ mydata <- read.csv(here::here("data/WDI/gapminder.csv"))
 
 <br> <br>
 
-If I give the folder "good-practices" to someone else:
+The only path in my script is "data/WDI/gapminder.csv".
+
+<br>
+
+Therefore, if I give the folder "good-practices" to someone else:
 
 * the output of `here::here()` will change because the location of the folder on the computer changed.
 
-* my code will still run because the path to the data inside the folder didn't change.
+* but my code will still run because the path to the data inside the folder didn't change.
 
 ## Relative paths in R
 
 <br>
 
-Another good thing: `{here}` will also work in you open the script outside of an RStudio project, and will work on all operating systems (e.g no paths problems because of Windows or Mac).
+More advantages: 
+
+* `{here}` will also work in you open the script outside of an RStudio project
+
+* `{here}` will work on all operating systems (e.g no paths problems because of Windows or Mac).
 
 <br>
 

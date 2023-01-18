@@ -12,7 +12,7 @@
   <meta name="generator" content="quarto-1.2.313">
 
   <meta name="author" content="Etienne Bacher">
-  <meta name="dcterms.date" content="2023-01-17">
+  <meta name="dcterms.date" content="2023-01-18">
   <title>Some good practices for research with R</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -404,7 +404,7 @@ Etienne Bacher
     </div>
 </div>
 
-  <p class="date">January 17, 2023</p>
+  <p class="date">January 18, 2023</p>
 </section>
 <section class="slide level2">
 
@@ -443,18 +443,10 @@ Etienne Bacher
 <p><img src="img/retraction-article.png"></p>
 </div>
 </section>
-<section class="slide level2">
-
-<p><br><br><br><br></p>
-<blockquote>
-<p>Everyone does coding mistakes; the important thing is whether you do your best to reduce them.</p>
-<p>– <cite>Me</cite></p>
-</blockquote>
-</section>
 <section id="what-is-validate" class="slide level2">
 <h2>What is <code>{validate}</code>?</h2>
 <p><br></p>
-<p><code>{validate}</code> is an R package that is very useful to ensure that your code has produced the right dataset.</p>
+<p><code>{validate}</code> is an R package whose goal is to ensure that your code has produced the expected output.</p>
 <p><br></p>
 <p>It should be used on the final and on the intermediate datasets (basically anytime you do some big modifications).</p>
 </section>
@@ -511,10 +503,9 @@ Etienne Bacher
 <span id="cb3-7"><a href="#cb3-7"></a>  <span class="co"># Ensure that there are no duplicated combination of iso-year</span></span>
 <span id="cb3-8"><a href="#cb3-8"></a>  <span class="fu">is_unique</span>(iso, year),</span>
 <span id="cb3-9"><a href="#cb3-9"></a>  </span>
-<span id="cb3-10"><a href="#cb3-10"></a>  <span class="co"># Ensure that year starts at 1952 and doesn't have any missing values</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a>  <span class="fu">min</span>(year) <span class="sc">==</span> <span class="dv">1952</span>,</span>
-<span id="cb3-12"><a href="#cb3-12"></a>  <span class="sc">!</span><span class="fu">is.na</span>(year)</span>
-<span id="cb3-13"><a href="#cb3-13"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-10"><a href="#cb3-10"></a>  <span class="co"># Ensure that year doesn't have any missing values</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a>  <span class="sc">!</span><span class="fu">is.na</span>(year)</span>
+<span id="cb3-12"><a href="#cb3-12"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section class="slide level2">
@@ -531,8 +522,7 @@ Etienne Bacher
 <pre><code>  name items passes fails nNA error warning               expression
 1   V1  1704   1704     0   0 FALSE   FALSE field_length(iso, n = 3)
 2   V2  1704   1704     0   0 FALSE   FALSE     is_unique(iso, year)
-3   V3     1      1     0   0 FALSE   FALSE        min(year) == 1952
-4   V4  1704   1704     0   0 FALSE   FALSE             !is.na(year)</code></pre>
+3   V3  1704   1704     0   0 FALSE   FALSE             !is.na(year)</code></pre>
 </div>
 </div>
 </section>
@@ -575,7 +565,7 @@ Etienne Bacher
 <ul>
 <li><code>in_range()</code>: useful for e.g percentages</li>
 <li><code>field_format()</code> for regular expressions</li>
-<li><code>is_linear_sequence()</code>: useful to check if there are some gaps in a series</li>
+<li><code>is_linear_sequence()</code>: useful to check if there are some gaps in time series</li>
 <li>many others…</li>
 </ul>
 <p><br></p>
@@ -586,20 +576,12 @@ Etienne Bacher
 <h1>Make your R environment reproducible with <code>{renv}</code></h1>
 
 </section>
-<section class="slide level2">
-
-<p><br><br><br><br></p>
-<blockquote>
-<p>The greatest thing with R is the number of packages available.</p>
-<p>The worst thing with R is the number of packages available.</p>
-<p>– Me</p>
-</blockquote>
-</section>
 <section id="packages-in-r" class="slide level2">
 <h2>Packages in R</h2>
 <p><br></p>
 <p>Packages make our life simpler by not having to reinvent the wheel.</p>
 <p><br></p>
+<p>..</p>
 <p>But <strong><em>packages evolve!</em></strong> Between two versions of a same package:</p>
 <ul>
 <li>functions can be removed or renamed;</li>
@@ -615,7 +597,11 @@ Etienne Bacher
 <p><br></p>
 <p>Two months later, I couldn’t run my code anymore because a package I used to extract some results slightly changed one of its arguments.</p>
 <p><br></p>
-<p><i class="fa-solid fa-arrow-right" aria-label="arrow-right"></i> &nbsp; choose your packages wisely</p>
+<p><i class="fa-solid fa-arrow-right" aria-label="arrow-right"></i> &nbsp; Two lessons:</p>
+<ol type="1">
+<li><p>choose your packages wisely: better to use popular and actively developed packages;</p></li>
+<li><p>use some tools to keep the version of the packages you used.</p></li>
+</ol>
 </section>
 <section id="packages-in-r-1" class="slide level2">
 <h2>Packages in R</h2>
@@ -633,7 +619,7 @@ Etienne Bacher
 <p><br></p>
 <p>Idea: create a <em>lockfile</em> that contains the version of all the packages you used in a project, as well as their dependencies.</p>
 <p><br></p>
-<p>When you give the project to someone else, they will be able to restore it with the exact same versions.</p>
+<p>When you give the project to someone else, they will be able to restore it with the exact same package versions.</p>
 </section>
 <section id="how-does-it-work" class="slide level2">
 <h2>How does it work?</h2>
@@ -748,7 +734,7 @@ Etienne Bacher
 </section>
 <section class="slide level2">
 
-<p><br></p>
+<p><br> <br></p>
 <p>This will create:</p>
 <ul>
 <li>a file called <code>renv.lock</code></li>
@@ -787,6 +773,7 @@ Etienne Bacher
 </section>
 <section class="slide level2">
 
+<p><br></p>
 <p>Now that we imported a new package, let’s see the status of <code>{renv}</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>renv<span class="sc">::</span><span class="fu">status</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -803,6 +790,7 @@ Etienne Bacher
 </section>
 <section class="slide level2">
 
+<p><br></p>
 <ol start="3" type="1">
 <li>Run <code>snapshot()</code> from time to time to update the lockfile;</li>
 </ol>
@@ -823,10 +811,10 @@ Etienne Bacher
 </section>
 <section id="good-to-know" class="slide level2">
 <h2>Good to know</h2>
-<p><br></p>
+<p><br> <br></p>
 <p><strong><code>{renv}</code> is not a panacea for reproducibility</strong>.</p>
 <p><br></p>
-<p>If your packages depend on external software (e.g <code>RSelenium</code> uses Java), <code>{renv}</code> cannot install it for you.</p>
+<p>If you use some packages that depend on external software (e.g <code>RSelenium</code> uses Java), <code>{renv}</code> cannot install this software for you.</p>
 <p><br></p>
 <p>Learn more about <code>{renv}</code> capabilities and limitations on <a href="https://rstudio.github.io/renv" class="external" target="_blank">the package’s website</a>.</p>
 </section></section>
@@ -837,7 +825,7 @@ Etienne Bacher
 </section>
 <section id="paths" class="slide level2">
 <h2>Paths</h2>
-<p><br></p>
+<p><br> <br></p>
 <p>Paths are the devil of reproducibility.</p>
 <p><br></p>
 <p>You can use as many best practices as you want, if you use <strong><em>absolute paths</em></strong>, it is useless.</p>
@@ -845,10 +833,10 @@ Etienne Bacher
 <section id="paths-1" class="slide level2">
 <h2>Paths</h2>
 <p><br><br></p>
-<p><strong>Absolute path:</strong> path that is specific to your computer because it <em>starts at the root of a computer</em>.</p>
+<p><strong>Absolute path:</strong> path that is specific to your computer because it starts <em>at the root of a computer</em>.</p>
 <p>Ex: “C:/Users/etienne/Desktop/myproject/mydata/WDI”</p>
 <p><br></p>
-<p><strong>Relative path:</strong> path that is specific to a project because it starts at the root of the project.</p>
+<p><strong>Relative path:</strong> path that is specific to a project because it starts <em>at the root of the project</em>.</p>
 <p>Ex: “mydata/WDI”</p>
 </section>
 <section id="relative-paths-in-r" class="slide level2">
@@ -876,16 +864,22 @@ Etienne Bacher
 <section id="relative-paths-in-r-1" class="slide level2">
 <h2>Relative paths in R</h2>
 <p><br> <br></p>
-<p>If I give the folder “good-practices” to someone else:</p>
+<p>The only path in my script is “data/WDI/gapminder.csv”.</p>
+<p><br></p>
+<p>Therefore, if I give the folder “good-practices” to someone else:</p>
 <ul>
 <li><p>the output of <code>here::here()</code> will change because the location of the folder on the computer changed.</p></li>
-<li><p>my code will still run because the path to the data inside the folder didn’t change.</p></li>
+<li><p>but my code will still run because the path to the data inside the folder didn’t change.</p></li>
 </ul>
 </section>
 <section id="relative-paths-in-r-2" class="slide level2">
 <h2>Relative paths in R</h2>
 <p><br></p>
-<p>Another good thing: <code>{here}</code> will also work in you open the script outside of an RStudio project, and will work on all operating systems (e.g no paths problems because of Windows or Mac).</p>
+<p>More advantages:</p>
+<ul>
+<li><p><code>{here}</code> will also work in you open the script outside of an RStudio project</p></li>
+<li><p><code>{here}</code> will work on all operating systems (e.g no paths problems because of Windows or Mac).</p></li>
+</ul>
 <p><br></p>
 <p>Get more info on <code>{here}</code> on <a href="https://here.r-lib.org/" class="external" target="_blank">the package’s website</a>.</p>
 </section></section>
