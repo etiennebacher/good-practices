@@ -23,15 +23,15 @@ execute:
 
 <br>
 
-1. Validate your data with `{validate}`
+1. Validate your data with [`{validate}`](https://github.com/data-cleaning/validate)
 
 <br>
 
-2. Make your R environment reproducible with `{renv}`
+2. Make your R environment reproducible with [`{renv}`](https://rstudio.github.io/renv/)
 
 <br>
 
-3. Make your paths reproducible with `{here}`
+3. Make your paths reproducible with [`{here}`](https://here.r-lib.org/)
 
 <br>
 
@@ -223,7 +223,7 @@ Even the most used packages in R can change a lot over the years (e.g `tidyverse
 
 <br>
 
-It is ***your*** responsability to make your scripts reproducible. If I take your script 4 years later, I should be able to run it.
+It is ***your*** responsibility to make sure that your scripts are reproducible. If I take your script 4 years later, I should be able to run it.
 
 <br>
 

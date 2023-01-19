@@ -30,6 +30,7 @@ $code-block-font-size: 0.8em;
 
 .reveal a > code  {
   color: $link-color;
+  border-bottom: 1px dashed;
 }
 
 .reveal .cell-output > pre {
