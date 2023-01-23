@@ -186,7 +186,7 @@ Packages make our life simpler by not having to reinvent the wheel.
 
 <br>
 
-..
+. . .
 
 But ***packages evolve!*** Between two versions of a same package:
 
