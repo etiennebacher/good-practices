@@ -613,6 +613,71 @@ completely restart the RStudio session to be sure your code can run in a fresh s
 * or `rstudioapi::restartSession()`.
 
 
+# Bonus: version control
+
+---
+ 
+If this is familiar...
+
+<div style="text-align: center">
+<img src="img/comic-version-control.png" height=500>
+</div>
+
+. . .
+
+<p>... you should <span style="font-size: 0.95rem"> (maybe) </span> use version control!</p>
+
+
+## Version control
+
+<br>
+
+Most famous version control tool: [Git](https://git-scm.com/).
+
+<br>
+
+Difference between Git and Github:
+
+* Git: core tool
+* Github: web interface that makes it much easier to use Git
+
+
+## Version control
+
+<br>
+
+Idea: you are able to go back to your project at any point in time.
+
+. . .
+
+<br>
+
+Workflow:
+
+* put your project on a repository
+
+. . .
+
+* write code, write drafts, etc.
+
+. . .
+
+* once in a while (at the end of the day, or after a big coding session), **commit**
+and **push** your changes to the repository
+
+. . .
+
+* the repository keeps track of what has changed and allows you to go back to your code at any point in time.
+
+
+## Version control
+
+Personal example
+
+
+
+
+
 # Thanks!
 
 <br>
