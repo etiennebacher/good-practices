@@ -445,7 +445,7 @@ Etienne Bacher
 </section>
 <section id="what-is-validate" class="slide level2">
 <h2>What is <code>{validate}</code>?</h2>
-<p><br></p>
+<p><br><br></p>
 <p><code>{validate}</code> is an R package whose goal is to ensure that your code has produced the expected output.</p>
 <p><br></p>
 <p>It should be used on the final and on the intermediate datasets (basically anytime you do some big modifications).</p>
@@ -468,7 +468,7 @@ Etienne Bacher
 <section id="example" class="slide level2">
 <h2>Example</h2>
 <p>Let’s take the dataset <code>gapminder</code>, modify it a bit, and assume it’s your output:</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-1_88926c337e3c07dab7632a7fc1abab9a">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(gapminder)</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(countrycode)</span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
@@ -490,10 +490,12 @@ Etienne Bacher
 </section>
 <section class="slide level2">
 
+<p><br></p>
 <ol type="1">
 <li>Define a series of expectations, or <strong><em>rules</em></strong>, with <code>validator()</code>:</li>
 </ol>
-<div class="cell">
+<p><br></p>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-2_06ee16da8b55763bc26ff3429823130d">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(validate)</span>
 <span id="cb3-2"><a href="#cb3-2"></a></span>
 <span id="cb3-3"><a href="#cb3-3"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
@@ -510,14 +512,16 @@ Etienne Bacher
 </section>
 <section class="slide level2">
 
+<p><br></p>
 <ol start="2" type="1">
 <li>Pass your dataset through these rules with <code>confront()</code>:</li>
 </ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>x <span class="ot">&lt;-</span> <span class="fu">confront</span>(gapminder, rules) <span class="sc">|&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">summary</span>() </span>
+<p><br></p>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-3_230f09a10cfbd2c41bb795091729e141">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>x <span class="ot">&lt;-</span> <span class="fu">confront</span>(gapminder, rules) </span>
+<span id="cb4-2"><a href="#cb4-2"></a>x <span class="ot">&lt;-</span> <span class="fu">summary</span>(x) </span>
 <span id="cb4-3"><a href="#cb4-3"></a></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="fu">head</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-4"><a href="#cb4-4"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  name items passes fails nNA error warning               expression
 1   V1  1704   1704     0   0 FALSE   FALSE field_length(iso, n = 3)
@@ -528,10 +532,12 @@ Etienne Bacher
 </section>
 <section class="slide level2">
 
+<p><br></p>
 <ol start="3" type="1">
 <li>Check that all rules are respected (or generate an error if there’s a failing test):</li>
 </ol>
-<div class="cell">
+<p><br></p>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-4_356548f23c357e6dad84c86abb6af576">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">stopifnot</span>(<span class="fu">unique</span>(x<span class="sc">$</span>fails) <span class="sc">==</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -540,7 +546,7 @@ Etienne Bacher
 <p>Writing rules can be tedious, for example if you have a list of variables that should be positive (GDP, population, etc.).</p>
 <p><br></p>
 <p>Instead of writing <code>var1 &gt;= 0</code>, <code>var2 &gt;= 0</code>, …, you can use <code>var_group()</code>:</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-5_382695ff9f553cf108b5a0b7cfab1770">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
 <span id="cb7-2"><a href="#cb7-2"></a>  <span class="at">positive_vars :=</span> <span class="fu">var_group</span>(lifeExp, pop, gdpPercap),</span>
 <span id="cb7-3"><a href="#cb7-3"></a>  positive_vars <span class="sc">&gt;=</span> <span class="dv">0</span></span>
@@ -588,21 +594,25 @@ Etienne Bacher
 <li>function outputs can change in terms of results or display;</li>
 <li>function arguments can be moved, removed or renamed.</li>
 </ul>
+</div>
+<div class="fragment">
 <p>Moreover, packages can disappear if they are not supported anymore.</p>
 </div>
 </section>
 <section id="personal-experience" class="slide level2">
 <h2>Personal experience</h2>
 <p><br></p>
-<p>I did my Master’s thesis in R using ~30 packages in total.</p>
+<p>I did my Master’s thesis with R using ~30 packages in total.</p>
 <p><br></p>
 <p>Two months later, I couldn’t run my code anymore because a package I used to extract some results slightly changed one of its arguments.</p>
 <p><br></p>
+<div class="fragment">
 <p><i class="fa-solid fa-arrow-right" aria-label="arrow-right"></i> &nbsp; Two lessons:</p>
 <ol type="1">
 <li><p>choose your packages wisely: better to use popular and actively developed packages;</p></li>
 <li><p>use some tools to keep the version of the packages you used.</p></li>
 </ol>
+</div>
 </section>
 <section id="packages-in-r-1" class="slide level2">
 <h2>Packages in R</h2>
@@ -619,8 +629,10 @@ Etienne Bacher
 <p>Take a snapshot of packages version using <code>{renv}</code>.</p>
 <p><br></p>
 <p>Idea: create a <em>lockfile</em> that contains the version of all the packages you used in a project, as well as their dependencies.</p>
+<div class="fragment">
 <p><br></p>
 <p>When you give the project to someone else, they will be able to restore it with the exact same package versions.</p>
+</div>
 </section>
 <section id="how-does-it-work" class="slide level2">
 <h2>How does it work?</h2>
@@ -644,7 +656,7 @@ Etienne Bacher
 <section id="example-1" class="slide level2">
 <h2>Example</h2>
 <p>Let’s take the example of <code>gapminder</code> again. We import two packages, <code>gapminder</code> and <code>countrycode</code>:</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-6_36e76989386b9abcfc93bc45eb16c84e">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">library</span>(gapminder)</span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="fu">library</span>(countrycode)</span>
 <span id="cb9-3"><a href="#cb9-3"></a></span>
@@ -669,7 +681,7 @@ Etienne Bacher
 <ol type="1">
 <li>Initialize <code>{renv}</code> whenever you want with <code>init()</code>:</li>
 </ol>
-<div class="cell">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-7_ba27d00669584c4ac35594da6690e5b1">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>renv<span class="sc">::</span><span class="fu">init</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
@@ -751,7 +763,7 @@ Etienne Bacher
 <li>Work as usual. Let’s import another package:</li>
 </ol>
 <p><br></p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-8_e4a4b30050ecc67b606c77d2dbf344ae">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
@@ -764,11 +776,11 @@ Etienne Bacher
 <p><br></p>
 <p><code>{renv}</code> creates a sort of “local library” in your project, so you need to reinstall <code>dplyr</code> first:</p>
 <p><br></p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-9_11df2675bbb612a6aa4a6dd73090c7b6">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-10_130f01308e55adf5529d660a0be90a3a">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -776,7 +788,7 @@ Etienne Bacher
 
 <p><br></p>
 <p>Now that we imported a new package, let’s see the status of <code>{renv}</code>:</p>
-<div class="cell">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-11_55ce9493b5d30fe19d28f3588df40128">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>renv<span class="sc">::</span><span class="fu">status</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
@@ -795,7 +807,7 @@ Etienne Bacher
 <ol start="3" type="1">
 <li>Run <code>snapshot()</code> from time to time to update the lockfile;</li>
 </ol>
-<div class="cell">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-12_341604dc7dc06fc8f85eb54226daa092">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>renv<span class="sc">::</span><span class="fu">snapshot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
@@ -836,9 +848,11 @@ Etienne Bacher
 <p><br><br></p>
 <p><strong>Absolute path:</strong> path that is specific to your computer because it starts <em>at the root of a computer</em>.</p>
 <p>Ex: “C:/Users/etienne/Desktop/myproject/mydata/WDI”</p>
+<div class="fragment">
 <p><br></p>
 <p><strong>Relative path:</strong> path that is specific to a project because it starts <em>at the root of the project</em>.</p>
 <p>Ex: “mydata/WDI”</p>
+</div>
 </section>
 <section id="relative-paths-in-r" class="slide level2">
 <h2>Relative paths in R</h2>
@@ -848,7 +862,7 @@ Etienne Bacher
 <ul>
 <li>to know the working directory:</li>
 </ul>
-<div class="cell">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-13_b8f19c51630b1d3e1221c69a69cb93c4">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>here<span class="sc">::</span><span class="fu">here</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "C:/Users/etienne/Desktop/Divers/good-practices"</code></pre>
@@ -858,7 +872,7 @@ Etienne Bacher
 <ul>
 <li>to use some data, script, etc.:</li>
 </ul>
-<div class="cell">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-14_a9ba38c4e38dd749b9a882b9c28666bb">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>mydata <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/WDI/gapminder.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -891,25 +905,29 @@ Etienne Bacher
 </section>
 <section id="remove-all-objects" class="slide level2">
 <h2>Remove all objects</h2>
-<p><br></p>
+<p><br><br></p>
 <p>Last but not least: how do you ensure your code will run in a fresh session on another laptop?</p>
 <p><br></p>
-<p>If you already use <code>rm(list = ls())</code> at the beginning of your script, good job!</p>
+<p>If you already use <code>rm(list = ls())</code> at the beginning of your script…</p>
 <p><br></p>
-<p><i class="fa-solid fa-arrow-right" aria-label="arrow-right"></i> &nbsp; <strong>you’re wrong!</strong></p>
+<div class="fragment">
+<p>… <strong>you’re wrong</strong></p>
+</div>
 </section>
 <section id="problem" class="slide level2">
 <h2>Problem</h2>
 <p><br></p>
 <p>What does <code>rm(list = ls())</code> do?</p>
 <ul>
-<li><p><code>rm()</code>: remove some objects from the environment</p></li>
+<li><p><code>rm()</code>: remove objects from the environment</p></li>
 <li><p><code>ls()</code>: list all objects in the environment</p></li>
 </ul>
 <p><br></p>
 <p>So <code>rm(list = ls())</code> removes all the objects from the environment: datasets, lists, etc.</p>
 <p><br></p>
+<div class="fragment">
 <p>What about loaded packages? What about options set with <code>options()</code>?</p>
+</div>
 </section>
 <section id="problem-1" class="slide level2">
 <h2>Problem</h2>
@@ -922,12 +940,12 @@ Etienne Bacher
 <li><p>try again <code>filter(iris, Species == "setosa")</code></p></li>
 </ol>
 <p><br></p>
-<p>As you can see, it still works, meaning that the package was not unloaded.</p>
+<p>This will still work, meaning that the package was not unloaded.</p>
 </section>
 <section id="solution-1" class="slide level2">
 <h2>Solution</h2>
-<p><br></p>
-<p>Instead of putting <code>rm(list = ls())</code> at the beginning of the script, you should completely restart the RStudio session to be sure your code can run in a fresh session:</p>
+<p><br> <br></p>
+<p>Instead of using <code>rm(list = ls())</code>, you should completely restart the session to be sure your code can run in a fresh session:</p>
 <ul>
 <li><p>Session &gt; Restart R;</p></li>
 <li><p>or Ctrl + Shift + F10;</p></li>
@@ -953,7 +971,7 @@ Etienne Bacher
 </section>
 <section id="version-control" class="slide level2">
 <h2>Version control</h2>
-<p><br></p>
+<p><br><br></p>
 <p>Most famous version control tool: <a href="https://git-scm.com/">Git</a>.</p>
 <p><br></p>
 <p>Difference between Git and Github:</p>
@@ -989,14 +1007,47 @@ Etienne Bacher
 </ul>
 </div>
 </section>
+<section id="personal-example" class="slide level2">
+<h2>Personal example</h2>
+<div style="text-align: center">
+<p><img src="img/git-perso-1.png" height="450"></p>
+</div>
+</section>
+<section id="personal-example-1" class="slide level2">
+<h2>Personal example</h2>
+<div style="text-align: center">
+<p><img src="img/git-perso-1-messages.png" height="450"></p>
+</div>
+<p>Commits I made: important to add a useful message (unlike some commits here)</p>
+</section>
+<section id="personal-example-2" class="slide level2">
+<h2>Personal example</h2>
+<div style="text-align: center">
+<p><img src="img/git-perso-1-browse.png" height="450"></p>
+</div>
+<p>Browse the repository when these commits were made (aka time-travel machine).</p>
+</section>
+<section id="personal-example-3" class="slide level2">
+<h2>Personal example</h2>
+<div style="text-align: center">
+<p><img src="img/git-perso-1-details.png" width="1400"></p>
+</div>
+</section>
 <section id="version-control-2" class="slide level2">
 <h2>Version control</h2>
-<p>Personal example</p>
+<p><br><br></p>
+<p>Git &amp; Github also very useful for collaborating (if everyone knows how to use it).</p>
+<p><br></p>
+<div class="fragment">
+<p><strong>But</strong> not easy to learn and takes time to be efficient (maybe a future training?)</p>
+<p><br></p>
+<p>Great resource for Git + Github + R: <a href="https://happygitwithr.com" class="external" target="_blank">https://happygitwithr.com</a></p>
+</div>
 </section></section>
 <section id="thanks" class="title-slide slide level1 center">
 <h1>Thanks!</h1>
 <p><br></p>
-<p>Source code for slides and exercises:</p>
+<p>Source code for slides and examples:</p>
 <p><a href="https://github.com/etiennebacher/good-practices" class="external" target="_blank">https://github.com/etiennebacher/good-practices</a></p>
 <p><br></p>
 <p>Comments, typos, etc.:</p>

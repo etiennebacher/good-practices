@@ -5,7 +5,7 @@ $link-color: #e69900;
 
 $presentation-heading-letter-spacing: 0.1rem;
 $presentation-heading-font-weight: 400;
-
+$presentation-h1-font-size: 3.5rem;
 $presentation-font-size-root: 30px;
 $code-block-font-size: 0.8em;
 
@@ -17,6 +17,10 @@ $code-block-font-size: 0.8em;
 
 .reveal .slides li {
   margin-left: 1em;
+}
+
+.reveal h1 {
+  margin-bottom: 10%;
 }
 
 .reveal .slides .subtitle {

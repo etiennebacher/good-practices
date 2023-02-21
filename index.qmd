@@ -19,6 +19,7 @@ format:
 execute:
   eval: true
   echo: true
+  cache: true
 ---
 
 <br>
@@ -61,7 +62,7 @@ Sometimes we do some mistakes that can have **big consequences**.
 
 ## What is `{validate}`?
 
-<br>
+<br><br>
 
 `{validate}` is an R package whose goal is to ensure that your code has produced
 the expected output.
@@ -102,7 +103,11 @@ head(gapminder)
 
 ---
 
+<br>
+
 1. Define a series of expectations, or ***rules***, with `validator()`:
+
+<br>
 
 ```{r}
 library(validate)
@@ -121,18 +126,26 @@ rules <- validator(
 
 --- 
 
+<br>
+
 2. Pass your dataset through these rules with `confront()`:
 
-```{r}
-x <- confront(gapminder, rules) |>
-  summary() 
+<br>
 
-head(x)
+```{r}
+x <- confront(gapminder, rules) 
+x <- summary(x) 
+
+x
 ```
 
 ---
 
+<br>
+
 3. Check that all rules are respected (or generate an error if there's a failing test):
+
+<br>
 
 ```{r}
 stopifnot(unique(x$fails) == 0)
@@ -194,19 +207,23 @@ But ***packages evolve!*** Between two versions of a same package:
 * function outputs can change in terms of results or display;
 * function arguments can be moved, removed or renamed.
 
+. . .
+
 Moreover, packages can disappear if they are not supported anymore.
 
 ## Personal experience
 
 <br>
 
-I did my Master's thesis in R using ~30 packages in total.
+I did my Master's thesis with R using ~30 packages in total.
 
 <br>
 
 Two months later, I couldn't run my code anymore because a package I used to extract some results slightly changed one of its arguments.
 
 <br>
+
+. . .
 
 {{< fa arrow-right >}} &nbsp; Two lessons:
 
@@ -238,6 +255,8 @@ Take a snapshot of packages version using `{renv}`.
 <br>
 
 Idea: create a *lockfile* that contains the version of all the packages you used in a project, as well as their dependencies. 
+
+. . .
 
 <br>
 
@@ -487,6 +506,8 @@ You can use as many best practices as you want, if you use ***absolute paths***,
 
 Ex: "C:/Users/etienne/Desktop/myproject/mydata/WDI"
 
+. . .
+
 <br>
 
 **Relative path:** path that is specific to a project because it starts *at the root of the project*.
@@ -548,17 +569,19 @@ Get more info on `{here}` on [the package's website](https://here.r-lib.org/){.e
 
 ## Remove all objects
 
-<br>
+<br><br>
 
 Last but not least: how do you ensure your code will run in a fresh session on another laptop?
 
 <br>
 
-If you already use `rm(list = ls())` at the beginning of your script, good job!
+If you already use `rm(list = ls())` at the beginning of your script...
 
 <br>
 
-{{< fa arrow-right >}} &nbsp; **you're wrong!**
+. . .
+
+... **you're wrong**
 
 
 ## Problem
@@ -567,7 +590,7 @@ If you already use `rm(list = ls())` at the beginning of your script, good job!
 
 What does `rm(list = ls())` do?
 
-* `rm()`: remove some objects from the environment
+* `rm()`: remove objects from the environment
 
 * `ls()`: list all objects in the environment
 
@@ -576,6 +599,8 @@ What does `rm(list = ls())` do?
 So `rm(list = ls())` removes all the objects from the environment: datasets, lists, etc.
 
 <br>
+
+. . .
 
 What about loaded packages? What about options set with `options()`?
 
@@ -596,15 +621,15 @@ What about loaded packages? What about options set with `options()`?
 
 <br>
 
-As you can see, it still works, meaning that the package was not unloaded.
+This will still work, meaning that the package was not unloaded.
 
 
 ## Solution 
 
-<br> 
+<br> <br> 
 
-Instead of putting `rm(list = ls())` at the beginning of the script, you should 
-completely restart the RStudio session to be sure your code can run in a fresh session:
+Instead of using `rm(list = ls())`, you should completely restart the session to
+be sure your code can run in a fresh session:
 
 * Session > Restart R;
 
@@ -630,7 +655,7 @@ If this is familiar...
 
 ## Version control
 
-<br>
+<br><br>
 
 Most famous version control tool: [Git](https://git-scm.com/).
 
@@ -670,11 +695,54 @@ and **push** your changes to the repository
 * the repository keeps track of what has changed and allows you to go back to your code at any point in time.
 
 
+## Personal example
+
+<div style="text-align: center">
+<img src="img/git-perso-1.png" height=450>
+</div>
+
+
+## Personal example
+
+<div style="text-align: center">
+<img src="img/git-perso-1-messages.png" height=450>
+</div>
+
+Commits I made: important to add a useful message (unlike some commits here)
+
+
+
+## Personal example
+
+<div style="text-align: center">
+<img src="img/git-perso-1-browse.png" height=450>
+</div>
+
+Browse the repository when these commits were made (aka time-travel machine).
+
+
+## Personal example
+
+<div style="text-align: center">
+<img src="img/git-perso-1-details.png" width=1400>
+</div>
+
+
 ## Version control
 
-Personal example
+<br><br>
 
+Git & Github also very useful for collaborating (if everyone knows how to use it).
 
+<br>
+
+. . .
+
+**But** not easy to learn and takes time to be efficient (maybe a future training?)
+
+<br>
+
+Great resource for Git + Github + R: [https://happygitwithr.com](https://happygitwithr.com){.external target="_blank"}
 
 
 
@@ -682,7 +750,7 @@ Personal example
 
 <br>
 
-Source code for slides and exercises: 
+Source code for slides and examples: 
 
 [https://github.com/etiennebacher/good-practices](https://github.com/etiennebacher/good-practices){.external target="_blank"}
 
