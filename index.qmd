@@ -732,7 +732,8 @@ Browse the repository when these commits were made (aka time-travel machine).
 
 <br><br>
 
-Git & Github also very useful for collaborating (if everyone knows how to use it).
+Git & Github are also very useful for collaboration (if everyone knows how to use it).
+It is also possible to link Overleaf and Github.
 
 <br>
 
