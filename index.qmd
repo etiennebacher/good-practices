@@ -24,22 +24,22 @@ execute:
 
 <br>
 
-1. Validate your data with [`{validate}`](https://github.com/data-cleaning/validate)
+1. Validate our data with [`{validate}`](https://github.com/data-cleaning/validate)
 
 <br>
 
-2. Make your R environment reproducible with [`{renv}`](https://rstudio.github.io/renv/)
+2. Make our R environment reproducible with [`{renv}`](https://rstudio.github.io/renv/)
 
 <br>
 
-3. Make your paths reproducible with [`{here}`](https://here.r-lib.org/)
+3. Make our paths reproducible with [`{here}`](https://here.r-lib.org/)
 
 <br>
 
 4. Keep a clean session
 
 
-# Validate your data with `{validate}`
+# Validate our data with `{validate}`
 
 ## Why?
 
@@ -58,30 +58,41 @@ Sometimes we do some mistakes that can have **big consequences**.
 </div>
 
 
+---
+
+Paper published in the JPE (error found in replication led by [I4R](https://i4replication.org/)):
+
+<br>
+
+<div style="text-align: center">
+<img src="img/jpe-error.png">
+</div>
+
+
 --- 
 
 ## What is `{validate}`?
 
 <br><br>
 
-`{validate}` is an R package whose goal is to ensure that your code has produced
+`{validate}` is an R package whose goal is to ensure that our code has produced
 the expected output.
 
 <br>
 
-It should be used on the final and on the intermediate datasets (basically anytime you do some big modifications).
+It should be used on the final and on the intermediate datasets (basically anytime we do some big modifications).
 
 
 
 ## How to use `{validate}`?
 
-<br>
+<br><br>
 
 1. Define a series of expectations, or ***rules***, with `validator()`
 
 <br>
 
-2. Pass your dataset through these rules with `confront()`
+2. Pass our dataset through these rules with `confront()`
 
 <br>
 
@@ -90,7 +101,7 @@ It should be used on the final and on the intermediate datasets (basically anyti
 
 ## Example
 
-Let's take the dataset `gapminder`, modify it a bit, and assume it's your output:
+Let's take the dataset `gapminder`, modify it a bit, and assume it's our output:
 
 ```{r}
 library(gapminder)
@@ -128,7 +139,7 @@ rules <- validator(
 
 <br>
 
-2. Pass your dataset through these rules with `confront()`:
+2. Pass our dataset through these rules with `confront()`:
 
 <br>
 
@@ -153,11 +164,11 @@ stopifnot(unique(x$fails) == 0)
 
 ---
 
-Writing rules can be tedious, for example if you have a list of variables that should be positive (GDP, population, etc.).
+Writing rules can be tedious, for example if we have a list of variables that should be positive (GDP, population, etc.).
 
 <br>
 
-Instead of writing `var1 >= 0`, `var2 >= 0`, ..., you can use `var_group()`:
+Instead of writing `var1 >= 0`, `var2 >= 0`, ..., we can use `var_group()`:
 
 ```{r}
 rules <- validator(
@@ -165,8 +176,8 @@ rules <- validator(
   positive_vars >= 0
 )
 
-x <- confront(gapminder, rules) |>
-  summary() 
+x <- confront(gapminder, rules) 
+x <- summary(x) 
 
 head(x)
 ```
@@ -187,7 +198,7 @@ There are a lot of other helpers:
 See more details in the [The Data Validation Cookbook](https://data-cleaning.github.io/validate/){.external target="_blank"}.
 
 
-# Make your R environment reproducible with `{renv}`
+# Make our R environment reproducible with `{renv}`
 
 ---
 
@@ -227,47 +238,51 @@ Two months later, I couldn't run my code anymore because a package I used to ext
 
 {{< fa arrow-right >}} &nbsp; Two lessons:
 
-1. choose your packages wisely: better to use popular and actively developed packages;
+1. choose our packages wisely: better to use popular and actively developed packages;
 
-2. use some tools to keep the version of the packages you used.
+2. use some tools to keep the version of the packages we used.
 
 
 ## Packages in R
 
-<br>
+<br><br>
 
 Even the most used packages in R can change a lot over the years (e.g `tidyverse`).
 
 <br>
 
-It is ***your*** responsibility to make sure that your scripts are reproducible. If I take your script 4 years later, I should be able to run it.
+It is ***our*** responsibility to make sure that our scripts are reproducible. 
+If I take our script 4 years later, I should be able to run it.
 
 <br>
 
 Problem: how to deal with evolving packages?
 
+
 ## Solution
 
-<br>
+<br><br>
 
 Take a snapshot of packages version using `{renv}`.
 
 <br>
 
-Idea: create a *lockfile* that contains the version of all the packages you used in a project, as well as their dependencies. 
+Idea: create a *lockfile* that contains the version of all the packages we used
+in a project, as well as their dependencies. 
 
 . . .
 
 <br>
 
-When you give the project to someone else, they will be able to restore it with the exact same package versions.
+When we give the project to someone else, they will be able to restore it with 
+the exact same package versions.
 
 
 ## How does it work?
 
 <br>
 
-1. Initialize `{renv}` whenever you want with `init()`;
+1. Initialize `{renv}` whenever we want with `init()`;
 
 <br>
 
@@ -279,12 +294,14 @@ When you give the project to someone else, they will be able to restore it with 
 
 <br>
 
-4. If you come back to this project later, or if you share this project, run `restore()` to get the packages as they were when you used them.
+4. If we come back to this project later, or if we share this project, run 
+`restore()` to get the packages as they were when we used them.
 
 
 ## Example
 
-Let's take the example of `gapminder` again. We import two packages, `gapminder` and `countrycode`:
+Let's take the example of `gapminder` again. We import two packages, `gapminder` 
+and `countrycode`:
 
 ```{r}
 library(gapminder)
@@ -297,7 +314,7 @@ head(gapminder)
 
 ---
 
-1. Initialize `{renv}` whenever you want with `init()`:
+1. Initialize `{renv}` whenever we want with `init()`:
 
 ```{r eval = FALSE}
 renv::init()
@@ -379,7 +396,7 @@ This will create:
 
 <br>
 
-{{< fa arrow-right >}} &nbsp; you shouldn't touch these files!
+{{< fa arrow-right >}} &nbsp; don't touch these files!
 
 
 ---
@@ -408,7 +425,8 @@ Hum... weird, `dplyr` was installed on my laptop.
 
 <br>
 
-`{renv}` creates a sort of "local library" in your project, so you need to reinstall `dplyr` first:
+`{renv}` creates a sort of "local library" in our project, so we need to reinstall
+`dplyr` first:
 
 <br>
 
@@ -478,31 +496,21 @@ Do you want to proceed? [y/N]: Y
 
 <br>
 
-If you use some packages that depend on external software (e.g `RSelenium` uses Java), `{renv}` cannot install this software for you.
+If we use some packages that depend on external software (e.g `RSelenium` uses 
+Java), `{renv}` cannot install this software for us.
 
 <br>
 
 Learn more about `{renv}` capabilities and limitations on [the package's website](https://rstudio.github.io/renv){.external target="_blank"}.
 
 
-# Make your paths reproducible with `{here}`
-
-## Paths
-
-<br> <br>
-
-Paths are the devil of reproducibility.
-
-<br>
-
-You can use as many best practices as you want, if you use ***absolute paths***, it is useless.
-
+# Make our paths reproducible with `{here}`
 
 ## Paths
 
 <br><br>
 
-**Absolute path:** path that is specific to your computer because it starts *at the root of a computer*.
+**Absolute path:** path that is specific to our computer because it starts *at the root of a computer*.
 
 Ex: "C:/Users/etienne/Desktop/myproject/mydata/WDI"
 
@@ -513,6 +521,7 @@ Ex: "C:/Users/etienne/Desktop/myproject/mydata/WDI"
 **Relative path:** path that is specific to a project because it starts *at the root of the project*.
 
 Ex: "mydata/WDI"
+
 
 ## Relative paths in R
 
@@ -536,6 +545,7 @@ here::here()
 mydata <- read.csv(here::here("data/WDI/gapminder.csv"))
 ```
 
+
 ## Relative paths in R
 
 <br> <br>
@@ -550,13 +560,14 @@ Therefore, if I give the folder "good-practices" to someone else:
 
 * but my code will still run because the path to the data inside the folder didn't change.
 
+
 ## Relative paths in R
 
 <br>
 
 More advantages: 
 
-* `{here}` will also work in you open the script outside of an RStudio project
+* `{here}` will also work if we open the script outside of an RStudio project
 
 * `{here}` will work on all operating systems (e.g no paths problems because of Windows or Mac).
 
@@ -571,7 +582,8 @@ Get more info on `{here}` on [the package's website](https://here.r-lib.org/){.e
 
 <br><br>
 
-Last but not least: how do you ensure your code will run in a fresh session on another laptop?
+Last but not least: how do we ensure our code will run in a fresh session on 
+another laptop?
 
 <br>
 
@@ -590,13 +602,14 @@ If you already use `rm(list = ls())` at the beginning of your script...
 
 What does `rm(list = ls())` do?
 
-* `rm()`: remove objects from the environment
+* `rm()`: remove a list of objects from the environment
 
 * `ls()`: list all objects in the environment
 
 <br>
 
-So `rm(list = ls())` removes all the objects from the environment: datasets, lists, etc.
+So `rm(list = ls())` removes all the objects from the environment: datasets, 
+variables, etc.
 
 <br>
 
