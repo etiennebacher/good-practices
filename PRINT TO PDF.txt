@@ -1,0 +1,8 @@
+Had problems with printing from the menu in Quarto (no background colors, etc.).
+
+Solution:
+
+- install decktape: https://github.com/astefanutti/decktape
+- in Command prompt:
+	> cd C:\Users\etienne\Desktop\Divers\good-practices
+	> decktape reveal https://www.good-practices.etiennebacher.com good-practices.pdf
