@@ -1,7 +1,7 @@
 ---
 title: "Some good practices for research with R"
 author: "Etienne Bacher"
-date: "`r Sys.Date()`"
+date: "March 16, 2023"
 date-format: long
 institute: "LISER"
 
@@ -101,16 +101,24 @@ It should be used on the final and on the intermediate datasets (basically anyti
 
 ## Example
 
-Let's take the dataset `gapminder`, modify it a bit, and assume it's our output:
+<br>
 
-```{r}
+Let's take an example with some data:
+
+<br>
+
+```{r, echo=FALSE}
 library(gapminder)
 library(countrycode)
 
 gapminder$iso <- countrycode(gapminder$country, "country.name", "iso3c")
-
-head(gapminder)
+my_data <- gapminder
 ```
+
+```{r}
+head(my_data)
+```
+
 
 ---
 
@@ -144,7 +152,7 @@ rules <- validator(
 <br>
 
 ```{r}
-x <- confront(gapminder, rules) 
+x <- confront(my_data, rules) 
 x <- summary(x) 
 
 x
@@ -176,7 +184,7 @@ rules <- validator(
   positive_vars >= 0
 )
 
-x <- confront(gapminder, rules) 
+x <- confront(my_data, rules) 
 x <- summary(x) 
 
 head(x)

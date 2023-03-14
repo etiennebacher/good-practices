@@ -13,7 +13,7 @@
   <meta name="generator" content="quarto-1.3.247">
 
   <meta name="author" content="Etienne Bacher">
-  <meta name="dcterms.date" content="2023-03-08">
+  <meta name="dcterms.date" content="2023-03-16">
   <title>Some good practices for research with R</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -406,7 +406,7 @@ Etienne Bacher
     </div>
 </div>
 
-  <p class="date">March 8, 2023</p>
+  <p class="date">March 16, 2023</p>
 </section>
 <section class="slide level2">
 
@@ -477,14 +477,11 @@ Etienne Bacher
 </section>
 <section id="example" class="slide level2">
 <h2>Example</h2>
-<p>Let’s take the dataset <code>gapminder</code>, modify it a bit, and assume it’s our output:</p>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-1_88926c337e3c07dab7632a7fc1abab9a">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(gapminder)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(countrycode)</span>
-<span id="cb1-3"><a href="#cb1-3"></a></span>
-<span id="cb1-4"><a href="#cb1-4"></a>gapminder<span class="sc">$</span>iso <span class="ot">&lt;-</span> <span class="fu">countrycode</span>(gapminder<span class="sc">$</span>country, <span class="st">"country.name"</span>, <span class="st">"iso3c"</span>)</span>
-<span id="cb1-5"><a href="#cb1-5"></a></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="fu">head</span>(gapminder)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><br></p>
+<p>Let’s take an example with some data:</p>
+<p><br></p>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-2_623f44582c19bdc6a99eb52b82ddeb85">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">head</span>(my_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
   country     continent  year lifeExp      pop gdpPercap iso  
@@ -505,7 +502,7 @@ Etienne Bacher
 <li>Define a series of expectations, or <strong><em>rules</em></strong>, with <code>validator()</code>:</li>
 </ol>
 <p><br></p>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-2_06ee16da8b55763bc26ff3429823130d">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-3_5bd3a3d7f9e6b92f96b2a0121c31063c">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(validate)</span>
 <span id="cb3-2"><a href="#cb3-2"></a></span>
 <span id="cb3-3"><a href="#cb3-3"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
@@ -527,8 +524,8 @@ Etienne Bacher
 <li>Pass our dataset through these rules with <code>confront()</code>:</li>
 </ol>
 <p><br></p>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-3_230f09a10cfbd2c41bb795091729e141">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>x <span class="ot">&lt;-</span> <span class="fu">confront</span>(gapminder, rules) </span>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-4_3101bfb1791a766ce69d54a81cae02c5">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>x <span class="ot">&lt;-</span> <span class="fu">confront</span>(my_data, rules) </span>
 <span id="cb4-2"><a href="#cb4-2"></a>x <span class="ot">&lt;-</span> <span class="fu">summary</span>(x) </span>
 <span id="cb4-3"><a href="#cb4-3"></a></span>
 <span id="cb4-4"><a href="#cb4-4"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -547,7 +544,7 @@ Etienne Bacher
 <li>Check that all rules are respected (or generate an error if there’s a failing test):</li>
 </ol>
 <p><br></p>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-4_356548f23c357e6dad84c86abb6af576">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-5_4b66c52e5b1cd990d13feac080e354a3">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">stopifnot</span>(<span class="fu">unique</span>(x<span class="sc">$</span>fails) <span class="sc">==</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -556,13 +553,13 @@ Etienne Bacher
 <p>Writing rules can be tedious, for example if we have a list of variables that should be positive (GDP, population, etc.).</p>
 <p><br></p>
 <p>Instead of writing <code>var1 &gt;= 0</code>, <code>var2 &gt;= 0</code>, …, we can use <code>var_group()</code>:</p>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-5_80f616ce42a21d15b153f683575ae017">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-6_d98d466b232d63e9b9a86ac4fe9a9faf">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>rules <span class="ot">&lt;-</span> <span class="fu">validator</span>(</span>
 <span id="cb7-2"><a href="#cb7-2"></a>  <span class="at">positive_vars :=</span> <span class="fu">var_group</span>(lifeExp, pop, gdpPercap),</span>
 <span id="cb7-3"><a href="#cb7-3"></a>  positive_vars <span class="sc">&gt;=</span> <span class="dv">0</span></span>
 <span id="cb7-4"><a href="#cb7-4"></a>)</span>
 <span id="cb7-5"><a href="#cb7-5"></a></span>
-<span id="cb7-6"><a href="#cb7-6"></a>x <span class="ot">&lt;-</span> <span class="fu">confront</span>(gapminder, rules) </span>
+<span id="cb7-6"><a href="#cb7-6"></a>x <span class="ot">&lt;-</span> <span class="fu">confront</span>(my_data, rules) </span>
 <span id="cb7-7"><a href="#cb7-7"></a>x <span class="ot">&lt;-</span> <span class="fu">summary</span>(x) </span>
 <span id="cb7-8"><a href="#cb7-8"></a></span>
 <span id="cb7-9"><a href="#cb7-9"></a><span class="fu">head</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -666,7 +663,7 @@ Etienne Bacher
 <section id="example-1" class="slide level2">
 <h2>Example</h2>
 <p>Let’s take the example of <code>gapminder</code> again. We import two packages, <code>gapminder</code> and <code>countrycode</code>:</p>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-6_36e76989386b9abcfc93bc45eb16c84e">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-7_e0930a16758222695ed24d616afa9559">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">library</span>(gapminder)</span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="fu">library</span>(countrycode)</span>
 <span id="cb9-3"><a href="#cb9-3"></a></span>
@@ -691,7 +688,7 @@ Etienne Bacher
 <ol type="1">
 <li>Initialize <code>{renv}</code> whenever we want with <code>init()</code>:</li>
 </ol>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-7_ba27d00669584c4ac35594da6690e5b1">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-8_263cf070a7911d5cd11519046a4a6d8c">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>renv<span class="sc">::</span><span class="fu">init</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
@@ -773,7 +770,7 @@ Etienne Bacher
 <li>Work as usual. Let’s import another package:</li>
 </ol>
 <p><br></p>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-8_e4a4b30050ecc67b606c77d2dbf344ae">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-9_8eb2ecc9a7d4d91073a8651d8cbb7d1c">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
@@ -786,11 +783,11 @@ Etienne Bacher
 <p><br></p>
 <p><code>{renv}</code> creates a sort of “local library” in our project, so we need to reinstall <code>dplyr</code> first:</p>
 <p><br></p>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-9_11df2675bbb612a6aa4a6dd73090c7b6">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-10_2d8eb7943b797df4251c4a7ba1c77961">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-10_130f01308e55adf5529d660a0be90a3a">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-11_603044435c2575ec4585bef2751dff14">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -798,7 +795,7 @@ Etienne Bacher
 
 <p><br></p>
 <p>Now that we imported a new package, let’s see the status of <code>{renv}</code>:</p>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-11_55ce9493b5d30fe19d28f3588df40128">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-12_7d9bfa2a98b5adb7852171167b5e5ddf">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>renv<span class="sc">::</span><span class="fu">status</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
@@ -817,7 +814,7 @@ Etienne Bacher
 <ol start="3" type="1">
 <li>Run <code>snapshot()</code> from time to time to update the lockfile;</li>
 </ol>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-12_341604dc7dc06fc8f85eb54226daa092">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-13_427fd959cfa22b9d846d7e9b822baaca">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>renv<span class="sc">::</span><span class="fu">snapshot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
@@ -865,7 +862,7 @@ Etienne Bacher
 <ul>
 <li>to know the working directory:</li>
 </ul>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-13_b8f19c51630b1d3e1221c69a69cb93c4">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-14_43749e5060ce774547861bef6eee11b6">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>here<span class="sc">::</span><span class="fu">here</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "C:/Users/etienne/Desktop/Divers/good-practices"</code></pre>
@@ -875,7 +872,7 @@ Etienne Bacher
 <ul>
 <li>to use some data, script, etc.:</li>
 </ul>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-14_a9ba38c4e38dd749b9a882b9c28666bb">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-15_948595c60540c467955bd81195eba115">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>mydata <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/WDI/gapminder.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
