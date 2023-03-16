@@ -43,7 +43,7 @@ execute:
 
 ## Why?
 
-<br><br>
+<br><br><br>
 
 Cleaning data can take hundreds or thousands of lines. 
 
@@ -73,7 +73,7 @@ Paper published in the JPE (error found in replication led by [I4R](https://i4re
 
 ## What is `{validate}`?
 
-<br><br>
+<br><br><br>
 
 `{validate}` is an R package whose goal is to ensure that our code has produced
 the expected output.
@@ -308,7 +308,7 @@ the exact same package versions.
 
 ## Example
 
-Let's take the example of `gapminder` again. We import two packages, `gapminder` 
+Let's take an example with the `gapminder` dataset. We import two packages, `gapminder` 
 and `countrycode`:
 
 ```{r}
